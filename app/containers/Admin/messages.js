@@ -17,4 +17,8 @@ export default defineMessages({
     id: `${scope}.reload`,
     defaultMessage: 'reload',
   },
+  update: {
+    id: `${scope}.update`,
+    defaultMessage: 'Update',
+  },
 });

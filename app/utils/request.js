@@ -39,7 +39,14 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, options = { headers: {} }) {
+export default function request(
+  url,
+  options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
+) {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);

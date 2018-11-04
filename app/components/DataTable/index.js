@@ -31,18 +31,28 @@ class DataTable extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    this.props.onMount(this);
+  };
+
   toggleSelection = (key, shift, row) => {
-    const keyIndex = _.findIndex(this.state.selection, i => i.nameID === key);
+    const keyIndex = _.findIndex(
+      this.state.selection,
+      i => i.market_hash_name === key,
+    );
     if (keyIndex !== -1) {
       this.setState({
-        selection: _.filter(this.state.selection, i => i.nameID !== key),
+        selection: _.filter(
+          this.state.selection,
+          i => i.market_hash_name !== key,
+        ),
       });
     } else {
       this.setState({
         selection: [
           ...this.state.selection,
           {
-            nameID: key,
+            market_hash_name: key,
             tradable: row.tradable,
           },
         ],
@@ -79,7 +89,7 @@ class DataTable extends React.Component {
       // we just push all the IDs onto the selection array
       currentRecords.forEach(item => {
         selection.push({
-          nameID: item._original.nameID, /*eslint-disable-line*/
+          market_hash_name: item._original.market_hash_name, /*eslint-disable-line*/
           tradable: item.tradable,
         });
       });
@@ -93,7 +103,7 @@ class DataTable extends React.Component {
       callback and detect the selection state ourselves. This allows any implementation
       for selection (either an array, object keys, or even a Javascript Set object).
     */
-    _.findIndex(this.state.selection, i => i.nameID === key) !== -1;
+    _.findIndex(this.state.selection, i => i.market_hash_name === key) !== -1;
 
   render() {
     const { toggleSelection, toggleAll, isSelected } = this;
@@ -105,10 +115,10 @@ class DataTable extends React.Component {
       toggleSelection,
       toggleAll,
       selectType: 'checkbox',
-      keyField: 'nameID',
+      keyField: 'market_hash_name',
       getTrProps: (s, r) => {
         if (r) {
-          const selected = this.isSelected(r.original.nameID);
+          const selected = this.isSelected(r.original.market_hash_name);
           return {
             style: {
               backgroundColor: selected ? 'lightgreen' : 'inherit',
@@ -189,6 +199,7 @@ class DataTable extends React.Component {
 
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,
+  onMount: PropTypes.func,
 };
 
 export default DataTable;
