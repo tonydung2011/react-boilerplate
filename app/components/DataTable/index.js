@@ -178,7 +178,6 @@ class DataTable extends React.Component {
         ]}
         manual
         defaultPageSize={10}
-        filterable
         // page={this.props.page - 1}
         pages={
           this.props.total / this.props.limit +
