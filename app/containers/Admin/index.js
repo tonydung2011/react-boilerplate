@@ -20,7 +20,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
 import messages from './messages';
-import { loadAllDotaItems, updateDotaItems } from '../DotaItemsAll/actions';
+import { loadDotaItems, updateDotaItems } from '../DotaItemsAll/actions';
 import DotaItemsTableContainer from '../DotaItemsAll/Loadable';
 import DotaItemsTableComponent from '../../components/DataTable';
 
@@ -48,6 +48,11 @@ export class Admin extends React.Component {
     this.state = {
       tradable: true,
       marketRate: '1',
+      marketHashName: '',
+      hero: '',
+      rarity: '',
+      minPrice: '',
+      maxPrice: '',
     };
   }
 
@@ -57,9 +62,39 @@ export class Admin extends React.Component {
     });
   };
 
+  onMarketHashNameEditChange = e => {
+    this.setState({
+      marketHashName: e.target.value,
+    });
+  };
+
+  onRarityEditChange = e => {
+    this.setState({
+      rarity: e.target.value,
+    });
+  };
+
+  onHeroEditChange = e => {
+    this.setState({
+      hero: e.target.value,
+    });
+  };
+
   onMarketRateEditChange = e => {
     this.setState({
       marketRate: e.target.value,
+    });
+  };
+
+  onMinPriceEditChange = e => {
+    this.setState({
+      minPrice: e.target.value,
+    });
+  };
+
+  onMaxPriceEditChange = e => {
+    this.setState({
+      maxPrice: e.target.value,
     });
   };
 
@@ -94,7 +129,13 @@ export class Admin extends React.Component {
             <Button
               variant="contained"
               color="primary"
-              onClick={this.props.loadAllDotaItems}
+              onClick={() =>
+                this.props.loadDotaItems({
+                  market_hash_name: this.state.marketHashName,
+                  hero: this.state.hero,
+                  rarity: this.state.rarity,
+                })
+              }
             >
               <FormattedMessage {...messages.reload} />
             </Button>
@@ -141,11 +182,66 @@ export class Admin extends React.Component {
             </Grid>
           </Grid>
         </Grid>
+        <Grid container className={classes.grid}>
+          <Grid item md={2}>
+            <TextField
+              className={classes.textField}
+              id="market-has-name"
+              label="Market Hash Name"
+              value={this.state.marketHashName}
+              onChange={this.onMarketHashNameEditChange}
+              margin="dense"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <TextField
+              className={classes.textField}
+              id="hero"
+              label="Hero"
+              value={this.state.hero}
+              onChange={this.onHeroEditChange}
+              margin="dense"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <TextField
+              className={classes.textField}
+              id="rarity"
+              label="Rarity"
+              value={this.state.rarity}
+              onChange={this.onRarityEditChange}
+              margin="dense"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <TextField
+              className={classes.textField}
+              id="min-price"
+              label="Min Price"
+              value={this.state.minPrice}
+              onChange={this.onMinPriceEditChange}
+              margin="dense"
+              type="number"
+            />
+          </Grid>
+          <Grid item md={2}>
+            <TextField
+              className={classes.textField}
+              id="max-price"
+              label="Max Price"
+              value={this.state.maxPrice}
+              onChange={this.onMaxPriceEditChange}
+              margin="dense"
+              type="number"
+            />
+          </Grid>
+          <Grid item md={3} />
+        </Grid>
         <br />
         <DotaItemsTableContainer
-          renderComponent={data => (
+          renderComponent={prop => (
             <DotaItemsTableComponent
-              data={data}
+              {...prop}
               onMount={ref => {
                 this.table = ref;
               }}
@@ -158,14 +254,14 @@ export class Admin extends React.Component {
 }
 
 Admin.propTypes = {
-  loadAllDotaItems: PropTypes.func.isRequired,
+  loadDotaItems: PropTypes.func.isRequired,
   updateDotaItems: PropTypes.func.isRequired,
   classes: PropTypes.object,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadAllDotaItems: () => dispatch(loadAllDotaItems()),
+    loadDotaItems: q => dispatch(loadDotaItems(q)),
     updateDotaItems: data => dispatch(updateDotaItems(data)),
   };
 }

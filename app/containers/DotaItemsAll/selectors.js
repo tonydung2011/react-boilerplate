@@ -19,7 +19,13 @@ const selectDotaItemsLoading = () =>
 const selectDotaItemsLoaded = () =>
   createSelector(selectDotaItemsAllDomain, state => state.get('loaded'));
 const selectDotaItemsData = () =>
-  createSelector(selectDotaItemsAllDomain, state => state.get('data'));
+  createSelector(selectDotaItemsAllDomain, state => state.get('data').toJS());
+const selectDotaItemsPage = () =>
+  createSelector(selectDotaItemsAllDomain, state => state.get('page'));
+const selectDotaItemsLimit = () =>
+  createSelector(selectDotaItemsAllDomain, state => state.get('limit'));
+const selectDotaItemsTotal = () =>
+  createSelector(selectDotaItemsAllDomain, state => state.get('total'));
 
 /**
  * Default selector used by DotaItemsAll
@@ -35,4 +41,7 @@ export {
   selectDotaItemsError,
   selectDotaItemsLoaded,
   selectDotaItemsLoading,
+  selectDotaItemsPage,
+  selectDotaItemsLimit,
+  selectDotaItemsTotal,
 };

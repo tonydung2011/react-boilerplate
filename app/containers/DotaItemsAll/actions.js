@@ -12,6 +12,8 @@ import {
   UPDATE_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS_SUCCESS,
   UPDATE_DOTA_ITEMS_FAIL,
+  UPDATE_PAGE,
+  UPDATE_LIMIT,
 } from './constants';
 
 export function defaultAction() {
@@ -19,9 +21,22 @@ export function defaultAction() {
     type: DEFAULT_ACTION,
   };
 }
-export function loadAllDotaItems() {
+export function updatePage(page) {
+  return {
+    type: UPDATE_PAGE,
+    page,
+  };
+}
+export function updateLimit(limit) {
+  return {
+    type: UPDATE_LIMIT,
+    limit,
+  };
+}
+export function loadDotaItems(query = {}) {
   return {
     type: GET_ALL_DOTA_ITEMS,
+    query,
   };
 }
 export function loadAllDotaItemsSuccess(data) {

@@ -20,12 +20,12 @@ class DataTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sorted: [],
-      page: 0,
-      pageSize: 10,
-      expanded: {},
-      resized: [],
-      filtered: [],
+      // sorted: [],
+      // page: 0,
+      // pageSize: 10,
+      // expanded: {},
+      // resized: [],
+      // filtered: [],
       selection: [],
       selectAll: false,
     };
@@ -33,6 +33,7 @@ class DataTable extends React.Component {
 
   componentDidMount = () => {
     this.props.onMount(this);
+    this.props.onFetchData();
   };
 
   toggleSelection = (key, shift, row) => {
@@ -175,22 +176,32 @@ class DataTable extends React.Component {
             Cell: props => <p>{props.value ? 'yes' : 'no'}</p>,
           },
         ]}
-        filterable
+        manual
         defaultPageSize={10}
+        filterable
+        // page={this.props.page - 1}
+        pages={
+          this.props.total / this.props.limit +
+          (this.props.total % this.props.limit > 0 ? 1 : 0)
+        }
+        loading={this.props.loading}
+        onFetchData={this.fetchData}
+        onPageChange={page => this.props.updatePage(page + 1)}
+        onPageSizeChange={pageSize => {
+          this.props.updateLimit(pageSize);
+        }}
         // Controlled props
-        sorted={this.state.sorted}
-        page={this.state.page}
-        pageSize={this.state.pageSize}
-        expanded={this.state.expanded}
-        resized={this.state.resized}
-        filtered={this.state.filtered}
+        // sorted={this.state.sorted}
+        // page={this.state.page}
+        // pageSize={this.state.pageSize}
+        // expanded={this.state.expanded}
+        // resized={this.state.resized}
+        // filtered={this.state.filtered}
         // Callbacks
-        onSortedChange={sorted => this.setState({ sorted })}
-        onPageChange={page => this.setState({ page })}
-        onPageSizeChange={(pageSize, page) => this.setState({ page, pageSize })}
-        onExpandedChange={expanded => this.setState({ expanded })}
-        onResizedChange={resized => this.setState({ resized })}
-        onFilteredChange={filtered => this.setState({ filtered })}
+        // onSortedChange={sorted => this.setState({ sorted })}
+        // onExpandedChange={expanded => this.setState({ expanded })}
+        // onResizedChange={resized => this.setState({ resized })}
+        // onFilteredChange={filtered => this.setState({ filtered })}
         {...checkboxProps}
       />
     );
@@ -199,7 +210,20 @@ class DataTable extends React.Component {
 
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.bool.isRequired,
+  pages: PropTypes.number,
+  page: PropTypes.number,
+  limit: PropTypes.number,
+  total: PropTypes.number,
+  onFetchData: PropTypes.func.isRequired,
+  updatePage: PropTypes.func.isRequired,
+  updateLimit: PropTypes.func.isRequired,
   onMount: PropTypes.func,
+};
+
+DataTable.defaultProps = {
+  pages: 1,
 };
 
 export default DataTable;

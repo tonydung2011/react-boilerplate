@@ -4,7 +4,7 @@
  *
  */
 
-import { fromJS, List } from 'immutable';
+import { fromJS } from 'immutable';
 import {
   DEFAULT_ACTION,
   GET_ALL_DOTA_ITEMS,
@@ -13,6 +13,8 @@ import {
   UPDATE_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS_SUCCESS,
   UPDATE_DOTA_ITEMS_FAIL,
+  UPDATE_PAGE,
+  UPDATE_LIMIT,
 } from './constants';
 
 export const initialState = fromJS({
@@ -23,6 +25,9 @@ export const initialState = fromJS({
   updateError: false,
   updating: false,
   updated: false,
+  page: 1,
+  limit: 10,
+  total: 0,
 });
 
 function dotaItemsAllReducer(state = initialState, action) {
@@ -38,7 +43,10 @@ function dotaItemsAllReducer(state = initialState, action) {
       return state
         .set('loading', false)
         .set('loaded', true)
-        .set('data', List(action.data));
+        .set('data', fromJS(action.data.data))
+        .set('page', fromJS(action.data.page))
+        .set('limit', fromJS(action.data.limit))
+        .set('total', action.data.total);
     case GET_DOTA_ITEMS_FAIL:
       return state
         .set('loading', false)
@@ -59,6 +67,10 @@ function dotaItemsAllReducer(state = initialState, action) {
         .set('updating', false)
         .set('updated', true)
         .set('updateError', true);
+    case UPDATE_PAGE:
+      return state.set('page', action.page);
+    case UPDATE_LIMIT:
+      return state.set('limit', action.limit);
     default:
       return state;
   }
