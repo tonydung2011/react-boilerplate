@@ -20,7 +20,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
 import messages from './messages';
-import { loadDotaItems, updateDotaItems } from '../DotaItemsAll/actions';
+import { reloadDotaItem, updateDotaItems } from '../DotaItemsAll/actions';
 import DotaItemsTableContainer from '../DotaItemsAll/Loadable';
 import DotaItemsTableComponent from '../../components/DataTable';
 
@@ -53,12 +53,19 @@ export class Admin extends React.Component {
       rarity: '',
       minPrice: '',
       maxPrice: '',
+      sort: '',
     };
   }
 
   onChangeTradable = e => {
     this.setState({
       tradable: e.target.value,
+    });
+  };
+
+  onChangeSort = e => {
+    this.setState({
+      sort: e.target.value,
     });
   };
 
@@ -108,6 +115,17 @@ export class Admin extends React.Component {
     this.props.updateDotaItems(updateData);
   };
 
+  onReloadDotaItem = () => {
+    this.props.reloadDotaItem({
+      marketHashName: this.state.marketHashName,
+      hero: this.state.hero,
+      rarity: this.state.rarity,
+      minPrice: this.state.minPrice,
+      maxPrice: this.state.maxPrice,
+      marketRate: this.state.marketRate,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -129,13 +147,7 @@ export class Admin extends React.Component {
             <Button
               variant="contained"
               color="primary"
-              onClick={() =>
-                this.props.loadDotaItems({
-                  market_hash_name: this.state.marketHashName,
-                  hero: this.state.hero,
-                  rarity: this.state.rarity,
-                })
-              }
+              onClick={this.onReloadDotaItem}
             >
               <FormattedMessage {...messages.reload} />
             </Button>
@@ -235,7 +247,25 @@ export class Admin extends React.Component {
               type="number"
             />
           </Grid>
-          <Grid item md={3} />
+          <Grid item md={2}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="sort-simple">Sort</InputLabel>
+              <Select
+                fullWidth
+                value={this.state.sort}
+                onChange={this.onChangeSort}
+                inputProps={{
+                  name: 'sort',
+                  id: 'sort-id',
+                }}
+              >
+                <MenuItem value="price">Price</MenuItem>
+                <MenuItem value="name">Name</MenuItem>
+                <MenuItem value="hero">hero</MenuItem>
+                <MenuItem value="rarity">rarity</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
         <br />
         <DotaItemsTableContainer
@@ -254,14 +284,14 @@ export class Admin extends React.Component {
 }
 
 Admin.propTypes = {
-  loadDotaItems: PropTypes.func.isRequired,
+  reloadDotaItem: PropTypes.func.isRequired,
   updateDotaItems: PropTypes.func.isRequired,
   classes: PropTypes.object,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadDotaItems: q => dispatch(loadDotaItems(q)),
+    reloadDotaItem: q => dispatch(reloadDotaItem(q)),
     updateDotaItems: data => dispatch(updateDotaItems(data)),
   };
 }

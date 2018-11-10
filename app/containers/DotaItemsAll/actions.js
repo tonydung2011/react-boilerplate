@@ -14,6 +14,13 @@ import {
   UPDATE_DOTA_ITEMS_FAIL,
   UPDATE_PAGE,
   UPDATE_LIMIT,
+  RELOAD_DOTA_ITEMS,
+  UPDATE_SORT,
+  UPDATE_HERO,
+  UPDATE_RARITY,
+  UPDATE_MARKET_HASH_NAME,
+  UPDATE_MIN_PRICE,
+  UPDATE_MAX_PRICE,
 } from './constants';
 
 export function defaultAction() {
@@ -33,9 +40,51 @@ export function updateLimit(limit) {
     limit,
   };
 }
+export function updateSort(sort) {
+  return {
+    type: UPDATE_SORT,
+    sort,
+  };
+}
+export function updateHero(hero) {
+  return {
+    type: UPDATE_HERO,
+    hero,
+  };
+}
+export function updateRarity(rarity) {
+  return {
+    type: UPDATE_RARITY,
+    rarity,
+  };
+}
+export function updateMarketHashName(marketHashName) {
+  return {
+    type: UPDATE_MARKET_HASH_NAME,
+    marketHashName,
+  };
+}
+export function updateMinPrice(minPrice) {
+  return {
+    type: UPDATE_MIN_PRICE,
+    minPrice,
+  };
+}
+export function updateMaxPrice(maxPrice) {
+  return {
+    type: UPDATE_MAX_PRICE,
+    maxPrice,
+  };
+}
 export function loadDotaItems(query = {}) {
   return {
     type: GET_ALL_DOTA_ITEMS,
+    query,
+  };
+}
+export function reloadDotaItem(query = {}) {
+  return {
+    type: RELOAD_DOTA_ITEMS,
     query,
   };
 }

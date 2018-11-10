@@ -15,6 +15,12 @@ import {
   UPDATE_DOTA_ITEMS_FAIL,
   UPDATE_PAGE,
   UPDATE_LIMIT,
+  UPDATE_HERO,
+  UPDATE_RARITY,
+  UPDATE_MARKET_HASH_NAME,
+  UPDATE_SORT,
+  UPDATE_MAX_PRICE,
+  UPDATE_MIN_PRICE,
 } from './constants';
 
 export const initialState = fromJS({
@@ -25,9 +31,15 @@ export const initialState = fromJS({
   updateError: false,
   updating: false,
   updated: false,
+  total: 0,
   page: 1,
   limit: 10,
-  total: 0,
+  marketHashName: '',
+  rarity: '',
+  hero: '',
+  minPrice: undefined,
+  maxPrice: undefined,
+  sort: 'price',
 });
 
 function dotaItemsAllReducer(state = initialState, action) {
@@ -71,6 +83,18 @@ function dotaItemsAllReducer(state = initialState, action) {
       return state.set('page', action.page);
     case UPDATE_LIMIT:
       return state.set('limit', action.limit);
+    case UPDATE_HERO:
+      return state.set('hero', action.hero);
+    case UPDATE_RARITY:
+      return state.set('rarity', action.rarity);
+    case UPDATE_MARKET_HASH_NAME:
+      return state.set('marketHashName', action.marketHashName);
+    case UPDATE_SORT:
+      return state.set('sort', action.sort);
+    case UPDATE_MAX_PRICE:
+      return state.set('maxPrice', action.maxPrice);
+    case UPDATE_MIN_PRICE:
+      return state.set('minPrice', action.minPrice);
     default:
       return state;
   }
