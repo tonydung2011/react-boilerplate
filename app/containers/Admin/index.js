@@ -22,7 +22,7 @@ import { withStyles } from '@material-ui/core/styles';
 import messages from './messages';
 import { reloadDotaItem, updateDotaItems } from '../DotaItemsAll/actions';
 import DotaItemsTableContainer from '../DotaItemsAll/Loadable';
-import DotaItemsTableComponent from '../../components/DataTable';
+import DotaItemsTableComponent from '../../components/DataTable/Loadable';
 
 const style = theme => ({
   grid: {
