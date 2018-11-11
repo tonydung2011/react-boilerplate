@@ -3,6 +3,8 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /(.*)
+- url: /
   static_files: build/index.html
   upload: build/index.html
+- url: /
+  static_dir: build
