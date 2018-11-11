@@ -156,6 +156,7 @@ class DataTable extends React.Component {
           this.props.total / this.props.limit +
           (this.props.total % this.props.limit > 0 ? 1 : 0)
         }
+        pageSize={this.props.limit}
         loading={this.props.loading}
         onFetchData={this.fetchData}
         onPageChange={page => this.props.updatePage(page + 1)}
