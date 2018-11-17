@@ -9,12 +9,26 @@
     padding: 10px
 }
 
+.margin-y-0 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.margin-y-10 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .text-align-left {
     text-align: left
 }
 
 .text-align-right {
     text-align: right
+}
+
+.text-align-center {
+    text-align: center
 }
 
 .home-container {
@@ -27,15 +41,26 @@
 .select-area-header {
     background: #171d21;
     color: aliceblue;
+    padding: 10px;
 }
 
 .select-area-body {
     background: gray;
     color: #171d21;
     height: 300px;
+    padding: 10px;
 }
 
 .toolbar {
     width: 100%;
     padding-top: 10px;
+}
+
+.toolbar-filter {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#items-list {
+    height: 500px;
 }
