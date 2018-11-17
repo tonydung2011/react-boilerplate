@@ -10,7 +10,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
+import HomePage from 'containers/Home';
 import Admin from 'containers/Admin';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 

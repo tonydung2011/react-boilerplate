@@ -4,3 +4,38 @@
 .margin-left-10 {
     padding-left: 5px
 }
+
+.pad-10 {
+    padding: 10px
+}
+
+.text-align-left {
+    text-align: left
+}
+
+.text-align-right {
+    text-align: right
+}
+
+.home-container {
+}
+
+.select-area {
+    padding: 10px;
+}
+
+.select-area-header {
+    background: #171d21;
+    color: aliceblue;
+}
+
+.select-area-body {
+    background: gray;
+    color: #171d21;
+    height: 300px;
+}
+
+.toolbar {
+    width: 100%;
+    padding-top: 10px;
+}
