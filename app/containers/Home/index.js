@@ -16,13 +16,12 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 
 import injectSaga from 'utils/injectSaga';
@@ -37,10 +36,55 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 const styles = () => ({
   input: {
-    display: 'none',
+    color: 'white',
   },
   icon: {
     marginTop: 'auto',
+  },
+  tradeButton: {
+    backgroundColor: '#4582A2',
+    borderColor: '#4582A2',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#11BCC2',
+      borderColor: '#11BCC2',
+    },
+  },
+  textFieldInput: {
+    color: 'white',
+  },
+  textFieldLabel: {
+    color: 'white',
+    '&$formLabelFocused': {
+      color: 'white',
+    },
+  },
+  formLabelFocused: {
+    color: 'white',
+  },
+  textFieldBottomLine: {
+    borderBottom: '0.5px solid white',
+    '&:focus': {
+      borderBottom: '1px solid white',
+    },
+    '&:hover': {
+      borderBottom: '1px solid white',
+    },
+  },
+  selectControl: {
+    width: '80%',
+  },
+  iconSelect: {
+    color: 'white',
+  },
+  subTitle: {
+    color: 'white',
+  },
+  h6: {
+    color: 'white',
+  },
+  appBar: {
+    backgroundColor: '#171d21',
   },
 });
 
@@ -62,12 +106,16 @@ export class Home extends React.Component {
     };
   }
 
-  renderSelectedItemYou = () => (
-    <p>SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW</p>
+  renderSelectedItemYou = classes => (
+    <Typography className={classes.subTitle}>
+      SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
+    </Typography>
   );
 
-  renderSelectedItemBot = () => (
-    <p>SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW</p>
+  renderSelectedItemBot = classes => (
+    <Typography className={classes.subTitle}>
+      SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
+    </Typography>
   );
 
   onChangePrice = field => event => {
@@ -90,6 +138,10 @@ export class Home extends React.Component {
     });
   };
 
+  refreshPlayerItems = () => {
+    console.log('click refresh');
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -99,7 +151,42 @@ export class Home extends React.Component {
           <meta name="description" content="Description of Home" />
         </Helmet>
         <div className="home-container">
-          <div className="header" />
+          <AppBar position="static" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" color="inherit" className={classes.grow}>
+                TRADE WITH ME
+              </Typography>
+              {/* {auth && (
+                <div>
+                  <IconButton
+                    aria-owns={open ? 'menu-appbar' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={this.handleClose}
+                  >
+                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  </Menu>
+                </div>
+              )} */}
+            </Toolbar>
+          </AppBar>
           <div className="body">
             <Grid container>
               <Grid item sm={5} className="select-area offer">
@@ -107,54 +194,104 @@ export class Home extends React.Component {
                   <div className="pad-10 select-area-header">
                     <Grid container>
                       <Grid item xs={6}>
-                        <p className="text-align-left">You Offer</p>
+                        <Typography
+                          variant="subtitle1"
+                          className={`text-align-left ${classes.subTitle}`}
+                        >
+                          You Offer
+                        </Typography>
                       </Grid>
                       <Grid item xs={6}>
-                        <p className="text-align-right">Money</p>
+                        <Typography
+                          variant="subtitle1"
+                          className={`text-align-right ${classes.subTitle}`}
+                        >
+                          Money
+                        </Typography>
                       </Grid>
                     </Grid>
                   </div>
                   <div className="pad-10 select-area-body">
-                    {this.renderSelectedItemYou()}
+                    {this.renderSelectedItemYou(classes)}
                   </div>
                 </div>
                 <br />
                 <div id="item-list-user">
                   <div>
                     <div className="pad-10 select-area-header">
-                      <Grid container>
-                        <Grid item sm={3}>
-                          <RefreshIcon className={classes.icon} />
-                        </Grid>
-                        <Grid item sm={4}>
-                          <FormControl>
-                            <InputLabel htmlFor="age-simple">Order</InputLabel>
-                            <Select
-                              value={this.state.player.sort}
-                              onChange={this.onChangePlayer('sort')}
-                              inputProps={{
-                                name: 'Order',
-                                id: 'order-id',
-                              }}
-                            >
-                              <MenuItem value="price">Price</MenuItem>
-                              <MenuItem value="name">Name</MenuItem>
-                              <MenuItem value="hero">hero</MenuItem>
-                              <MenuItem value="rarity">rarity</MenuItem>
-                            </Select>
-                          </FormControl>
+                      <Grid container spacing={8}>
+                        <Grid item sm={2}>
+                          <div className="refresh-icon-wrapper">
+                            <Grid container justify="center">
+                              <Grid item>
+                                <RefreshIcon
+                                  className={classes.icon}
+                                  onClick={this.refreshPlayerItems}
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
                         </Grid>
                         <Grid item sm={5}>
                           <TextField
+                            id="item-player-order-field"
+                            select
+                            label="Order"
+                            className={classes.input}
+                            value={this.state.player.sort}
+                            onChange={this.onChangePlayer('sort')}
+                            SelectProps={{
+                              native: true,
+                              inputProps: {
+                                className: classes.textFieldInput,
+                                classes: {
+                                  icon: classes.iconSelect,
+                                },
+                              },
+                            }}
+                            InputProps={{
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
+                            }}
+                            InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
+                              shrink: true,
+                            }}
+                            margin="dense"
+                            fullWidth
+                          >
+                            <option value="price">Price</option>
+                            <option value="name">Name</option>
+                            <option value="hero">hero</option>
+                            <option value="rarity">rarity</option>
+                          </TextField>
+                        </Grid>
+                        <Grid item sm={5}>
+                          <TextField
+                            className={classes.input}
                             id="item-player-search-field"
                             label="Search"
                             value={this.state.player.search}
                             onChange={this.onChangePlayer('search')}
+                            margin="dense"
+                            fullWidth
+                            InputProps={{
+                              className: classes.textFieldInput,
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
+                            }}
                             InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
                               shrink: true,
                             }}
-                            margin="normal"
-                            fullWidth
                           />
                         </Grid>
                       </Grid>
@@ -168,7 +305,7 @@ export class Home extends React.Component {
                   <Button
                     variant="outlined"
                     color="primary"
-                    className={classes.button}
+                    className={classes.tradeButton}
                     fullWidth
                   >
                     TRADE
@@ -176,38 +313,69 @@ export class Home extends React.Component {
                 </div>
                 <div className="toolbar-filter">
                   <div className="pad-10 select-area-header">
-                    <p className="text-align-center">BOT FILTER</p>
+                    <Typography
+                      variant="subtitle1"
+                      className={`text-align-center ${classes.subTitle}`}
+                    >
+                      BOT FILTER
+                    </Typography>
                   </div>
                   <div className="pad-10 select-area-body">
                     <div id="price-filter">
-                      <p className="text-align-center margin-y-0">PRICE</p>
+                      <Typography
+                        variant="subtitle1"
+                        className={`text-align-center margin-y-0 ${
+                          classes.subTitle
+                        }`}
+                      >
+                        PRICE
+                      </Typography>
                       <Grid container spacing={8}>
                         <Grid item sm={6}>
                           <TextField
+                            className={classes.input}
                             id="item-filter-min-price"
                             label="Min"
                             value={this.state.filter.minPrice}
                             onChange={this.onChangePrice('minPrice')}
                             type="number"
-                            className={classes.textField}
-                            InputLabelProps={{
-                              shrink: true,
+                            InputProps={{
+                              className: classes.textFieldInput,
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
                             }}
-                            margin="normal"
+                            InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
+                            }}
+                            margin="dense"
                             fullWidth
                           />
                         </Grid>
                         <Grid item sm={6}>
                           <TextField
+                            className={classes.input}
                             id="item-filter-max-price"
                             label="Max"
                             value={this.state.filter.maxPrice}
                             onChange={this.onChangePrice('maxPrice')}
                             type="number"
-                            InputLabelProps={{
-                              shrink: true,
+                            InputProps={{
+                              className: classes.textFieldInput,
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
                             }}
-                            margin="normal"
+                            InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
+                            }}
+                            margin="dense"
                             fullWidth
                           />
                         </Grid>
@@ -230,27 +398,47 @@ export class Home extends React.Component {
                     </div>
                     <div id="hero-filter">
                       <TextField
+                        className={classes.input}
                         id="item-filter-hero"
                         label="Hero"
                         value={this.state.filter.hero}
                         onChange={this.onChangePrice('hero')}
-                        InputLabelProps={{
-                          shrink: true,
+                        InputProps={{
+                          className: classes.textFieldInput,
+                          classes: {
+                            underline: classes.textFieldBottomLine,
+                          },
                         }}
-                        margin="normal"
+                        InputLabelProps={{
+                          FormLabelClasses: {
+                            root: classes.textFieldLabel,
+                            focused: classes.formLabelFocused,
+                          },
+                        }}
+                        margin="dense"
                         fullWidth
                       />
                     </div>
                     <div id="hero-rarity">
                       <TextField
+                        className={classes.input}
                         id="item-filter-rarity"
                         label="rarity"
                         value={this.state.filter.rarity}
                         onChange={this.onChangePrice('rarity')}
-                        InputLabelProps={{
-                          shrink: true,
+                        InputProps={{
+                          className: classes.textFieldInput,
+                          classes: {
+                            underline: classes.textFieldBottomLine,
+                          },
                         }}
-                        margin="normal"
+                        InputLabelProps={{
+                          FormLabelClasses: {
+                            root: classes.textFieldLabel,
+                            focused: classes.formLabelFocused,
+                          },
+                        }}
+                        margin="dense"
                         fullWidth
                       />
                     </div>
@@ -258,25 +446,124 @@ export class Home extends React.Component {
                 </div>
               </Grid>
               <Grid item sm={5} className="select-area receive">
-                <div>
+                <div id="selected-bot-item">
                   <div className="pad-10 select-area-header">
                     <Grid container>
                       <Grid item xs={6}>
-                        <p className="text-align-left">Money</p>
+                        <Typography
+                          variant="subtitle1"
+                          className={`text-align-left ${classes.subTitle}`}
+                        >
+                          Money
+                        </Typography>
                       </Grid>
                       <Grid item xs={6}>
-                        <p className="text-align-right">You Receive</p>
+                        <Typography
+                          variant="subtitle1"
+                          className={`text-align-right ${classes.subTitle}`}
+                        >
+                          You Receive
+                        </Typography>
                       </Grid>
                     </Grid>
                   </div>
                   <div className="pad-10 select-area-body">
-                    {this.renderSelectedItemBot()}
+                    {this.renderSelectedItemBot(classes)}
+                  </div>
+                </div>
+                <br />
+                <div id="item-list-bot">
+                  <div>
+                    <div className="pad-10 select-area-header">
+                      <Grid container spacing={8}>
+                        <Grid item sm={2}>
+                          <div className="refresh-icon-wrapper">
+                            <Grid container justify="center">
+                              <Grid item>
+                                <RefreshIcon
+                                  className={classes.icon}
+                                  onClick={this.refreshPlayerItems}
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                        <Grid item sm={5}>
+                          <TextField
+                            id="item-player-order-field"
+                            select
+                            label="Order"
+                            className={classes.input}
+                            value={this.state.player.sort}
+                            onChange={this.onChangePlayer('sort')}
+                            SelectProps={{
+                              native: true,
+                              inputProps: {
+                                className: classes.textFieldInput,
+                                classes: {
+                                  icon: classes.iconSelect,
+                                },
+                              },
+                            }}
+                            InputProps={{
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
+                            }}
+                            InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
+                              shrink: true,
+                            }}
+                            margin="dense"
+                            fullWidth
+                          >
+                            <option value="price">Price</option>
+                            <option value="name">Name</option>
+                            <option value="hero">hero</option>
+                            <option value="rarity">rarity</option>
+                          </TextField>
+                        </Grid>
+                        <Grid item sm={5}>
+                          <TextField
+                            className={classes.input}
+                            id="item-player-search-field"
+                            label="Search"
+                            value={this.state.player.search}
+                            onChange={this.onChangePlayer('search')}
+                            margin="dense"
+                            fullWidth
+                            InputProps={{
+                              className: classes.textFieldInput,
+                              classes: {
+                                underline: classes.textFieldBottomLine,
+                              },
+                            }}
+                            InputLabelProps={{
+                              FormLabelClasses: {
+                                root: classes.textFieldLabel,
+                                focused: classes.formLabelFocused,
+                              },
+                              shrink: true,
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                    <div className="pad-10 select-area-body" id="items-list" />
                   </div>
                 </div>
               </Grid>
             </Grid>
           </div>
         </div>
+        <AppBar position="static" className={`pad-10 ${classes.appBar}`}>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            TRADE WITH ME
+          </Typography>
+        </AppBar>
       </div>
     );
   }
