@@ -16,9 +16,9 @@ export default function configureStore(initialState = {}, history) {
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state
   const middlewares = [
+    locationMiddleware,
     sagaMiddleware,
     routerMiddleware(history),
-    locationMiddleware,
   ];
 
   const enhancers = [applyMiddleware(...middlewares)];

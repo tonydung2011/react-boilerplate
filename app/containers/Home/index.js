@@ -29,6 +29,7 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectHome from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import { getBotItems, callSteamAuthenticate } from './actions';
 // import messages from './messages';
 
 const { createSliderWithTooltip } = Slider;
@@ -105,6 +106,11 @@ export class Home extends React.Component {
       },
     };
   }
+
+  componentDidMount = () => {
+    this.props.getBotItems();
+    this.props.callSteamAuthenticate();
+  };
 
   renderSelectedItemYou = classes => (
     <Typography className={classes.subTitle}>
@@ -589,7 +595,8 @@ export class Home extends React.Component {
 }
 
 Home.propTypes = {
-  // dispatch: PropTypes.func.isRequired,
+  getBotItems: PropTypes.func.isRequired,
+  callSteamAuthenticate: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
@@ -599,7 +606,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getBotItems: () => dispatch(getBotItems()),
+    callSteamAuthenticate: () => dispatch(callSteamAuthenticate()),
   };
 }
 

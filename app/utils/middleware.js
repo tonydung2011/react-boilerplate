@@ -18,7 +18,11 @@ export const locationMiddleware = store => next => action => {
     ) {
       const url = new URL(window.location.href);
       const userId = url.searchParams.get('openid.claimed_id');
-      window.localStorage.setItem('tradewithme/user-id', userId);
+      const regex = /\/\d+$/;
+      window.localStorage.setItem(
+        'tradewithme/user-id',
+        userId.substr(userId.search(regex) + 1),
+      );
     }
   }
   return next(action);

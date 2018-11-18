@@ -7,38 +7,30 @@
 import { fromJS } from 'immutable';
 import {
   DEFAULT_ACTION,
-  CALL_STEAM_AUTHENTICATE,
   AUTHENTICATE_SUCCESS,
   AUTHENTICATE_FAIL,
+  GET_BOT_ITEMS_SUCCESS,
+  GET_BOT_ITEMS_FAIL,
+  GET_BOT_ITEMS,
 } from './constants';
+
+const botList = JSON.parse(process.env.BOT_LIST);
 
 export const initialState = fromJS({
   user: {
     auth: false,
-    info: {},
     items: [],
     loading: false,
     loaded: false,
     error: false,
-    filter: {
-      sort: '',
-      search: '',
-    },
   },
   bot: {
-    id: '1',
+    id: botList[0],
+    name: '1',
     items: [],
     loading: false,
     loaded: false,
     error: false,
-    filter: {
-      minPrice: 0,
-      maxPrice: 9999,
-      hero: '',
-      rarity: '',
-      sort: '',
-      search: '',
-    },
   },
   trade: {
     urlTrade: '',
@@ -51,14 +43,27 @@ function homeReducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
-    case CALL_STEAM_AUTHENTICATE:
-      return state;
     case AUTHENTICATE_SUCCESS:
       return state
         .setIn(['user', 'auth'], true)
-        .setIn(['user', 'info'], action.payload.data);
+        .setIn(['user', 'items'], fromJS(action.data));
     case AUTHENTICATE_FAIL:
       return state.setIn(['user', 'auth'], false);
+    case GET_BOT_ITEMS:
+      return state
+        .setIn(['bot', 'loading'], true)
+        .setIn(['bot', 'loaded'], false);
+    case GET_BOT_ITEMS_SUCCESS:
+      return state
+        .setIn(['bot', 'loading'], false)
+        .setIn(['bot', 'loaded'], true)
+        .setIn(['bot', 'items'], fromJS(action.data))
+        .setIn(['bot', 'error'], false);
+    case GET_BOT_ITEMS_FAIL:
+      return state
+        .setIn(['bot', 'loading'], false)
+        .setIn(['bot', 'loaded'], true)
+        .setIn(['bot', 'error'], true);
     default:
       return state;
   }
