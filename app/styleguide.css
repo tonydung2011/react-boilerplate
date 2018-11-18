@@ -32,9 +32,9 @@
 }
 
 .home-container {
-    background-image: url('https://00e9e64bac7bf1555a3f0f247392cfa4ea67c70698ef047bbb-apidata.googleusercontent.com/download/storage/v1/b/staging.steam-220215.appspot.com/o/rsz_11rsz_background_menu3.png?qk=AD5uMEsSlBhkNNN-OGrzRuuu0CR-dWYxPxkDX86AhgaluOBhb1rKr2zrU6q8oLONNqGz2Ss56uwXaXwi12MHJzcwAkthEfQzhkBiBNSEcl3QGO4vRsIOkz9sR8qEDauS-e9BCdftuFwad9dmV0gOVPSyiq1Hjkbx_98aYeAb0WlDM6l6TuLKXrVAi3BbrN62QMWo9_vJ9igv8UHrhxNTlfXsDLhqXjv8DEnbn-KZVpYbAQd1Dcp0f0PwWf2edgRi4SKAIac_ia_Eg5931AMuCDgZJcnRnicvu68Lrlr_uukA-o46MRD1HWLdpRXLPy046laNCSyNH1ginznxgADMBRcCLyMKQc_1nz_914jTLF-z__HIW3itd3mYYTJ-ytZn_SMUaDqDKYH1_mT1WkiLUto3SrvIIeDA5RK7Az0NnVjwSHP6UaTmAj8kkyXrH7d_T93xkMlqn2T3yU0yNpHuz75znws5miBjBcdCNc5k7Pq4F-1g47yvirg6HhVyfSoJ5HjnyPQfbDM6Fjz1ftcfJSQ88a0SNClEoWd686aczinWYCWLLdl3_SbwkFIIuXsBFOrzZnQEejL_jN8HUzCZmsX4Ksapy8oklijWlmiN_S2-TylYjPeICtYnWd-fA8mD6-NK_QqLt7hNQCwsNP0diWSznnIYIgrTEj6a5AgCCFe5vYsKJxnuszC818_LnTyv6-KD39Igs0CEVMg2KWcBddDKhh8luZ9foGuUv7rG8SCDnQKe8xOiAu0cB8y8KvhjbSWIX9eQyRkR0RltupD_9f_rYvorXVOx5D3kEndC8cSoQIyNC1ZMEJc');
+    background-image: url('https://storage.googleapis.com/staging.steam-220215.appspot.com/rsz_11rsz_background_menu3.png');
     overflow: 'hidden';
-    background-size: 120%;
+    background-size: auto 100%;
     background-blend-mode: screen;
 }
 

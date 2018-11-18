@@ -235,11 +235,11 @@ export class Home extends React.Component {
                         <Grid item sm={5}>
                           <TextField
                             id="item-player-order-field"
-                            select
                             label="Order"
                             className={classes.input}
                             value={this.state.player.sort}
                             onChange={this.onChangePlayer('sort')}
+                            select
                             SelectProps={{
                               native: true,
                               inputProps: {
@@ -421,13 +421,22 @@ export class Home extends React.Component {
                     </div>
                     <div id="hero-rarity">
                       <TextField
+                        select
                         className={classes.input}
                         id="item-filter-rarity"
-                        label="rarity"
+                        label="Rarity"
                         value={this.state.filter.rarity}
                         onChange={this.onChangePrice('rarity')}
+                        SelectProps={{
+                          native: true,
+                          inputProps: {
+                            className: classes.textFieldInput,
+                            classes: {
+                              icon: classes.iconSelect,
+                            },
+                          },
+                        }}
                         InputProps={{
-                          className: classes.textFieldInput,
                           classes: {
                             underline: classes.textFieldBottomLine,
                           },
@@ -437,10 +446,20 @@ export class Home extends React.Component {
                             root: classes.textFieldLabel,
                             focused: classes.formLabelFocused,
                           },
+                          shrink: true,
                         }}
                         margin="dense"
                         fullWidth
-                      />
+                      >
+                        <option value="">All</option>
+                        <option value="uncommon">uncommon</option>
+                        <option value="common">common</option>
+                        <option value="rare">rare</option>
+                        <option value="immortal">immortal</option>
+                        <option value="legendary">legendary</option>
+                        <option value="mythical">mythical</option>
+                        <option value="arcana">arcana</option>
+                      </TextField>
                     </div>
                   </div>
                 </div>
