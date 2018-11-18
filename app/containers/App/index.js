@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import HomePage from 'containers/Home';
 import Admin from 'containers/Admin';
@@ -22,6 +22,13 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/admin" component={Admin} />
+        <Route exact path="/auth-return-url">
+          <Redirect
+            to={{
+              pathname: '/',
+            }}
+          />
+        </Route>
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
