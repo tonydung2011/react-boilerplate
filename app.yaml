@@ -5,6 +5,7 @@ threadsafe: true
 handlers:
 - url: /admin
   static_files: build/index.html
+  upload: build/index.html
 - url: /
   static_files: build/index.html
   upload: build/index.html
