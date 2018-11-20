@@ -33,6 +33,7 @@ import ItemThumnail from 'components/ItemThumnail';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import Config from 'utils/config';
 import makeSelectHome, { selectBot, selectUser } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -202,7 +203,7 @@ export class Home extends React.Component {
             <Typography className={classes.steamNotloginText}>
               LOGIN VIA STEAM
             </Typography>
-            <a href={process.env.STEAM_OPENID_URL}>
+            <a href={Config.steamOpenIdUrl}>
               <img
                 src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
                 height={35}
@@ -321,7 +322,7 @@ export class Home extends React.Component {
                   </Menu>
                 </div>
               ) : (
-                <a href={process.env.STEAM_OPENID_URL}>
+                <a href={Config.steamOpenIdUrl}>
                   <img
                     src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
                     height={35}
