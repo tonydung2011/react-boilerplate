@@ -14,6 +14,8 @@ import { compose } from 'redux';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
+import Spinner from 'react-spinkit';
+import _ from 'lodash';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -21,15 +23,25 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { withStyles } from '@material-ui/core/styles';
 
+import ItemThumnail from 'components/ItemThumnail';
+
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectHome from './selectors';
+import makeSelectHome, { selectBot, selectUser } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getBotItems, callSteamAuthenticate } from './actions';
+import {
+  getBotItems,
+  callSteamAuthenticate,
+  steamOauth,
+  logout,
+} from './actions';
 // import messages from './messages';
 
 const { createSliderWithTooltip } = Slider;
@@ -41,6 +53,7 @@ const styles = () => ({
   },
   icon: {
     marginTop: 'auto',
+    color: 'white',
   },
   tradeButton: {
     backgroundColor: '#4582A2',
@@ -87,6 +100,22 @@ const styles = () => ({
   appBar: {
     backgroundColor: '#171d21',
   },
+  fullSpace: {
+    width: '100%',
+    height: '100%',
+  },
+  bigAvatar: {
+    width: 35,
+    height: 35,
+    border: '1px solid white',
+  },
+  steamNotloginText: {
+    textAlign: 'center',
+    color: 'white',
+  },
+  tradeWithMe: {
+    flexGrow: 1,
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -104,10 +133,11 @@ export class Home extends React.Component {
         sort: '',
         search: '',
       },
+      showPlayerMenu: false,
     };
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     this.props.getBotItems();
     this.props.callSteamAuthenticate();
   };
@@ -123,6 +153,103 @@ export class Home extends React.Component {
       SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
     </Typography>
   );
+
+  renderBotItems = classes => {
+    if (!this.props.bot.loaded && this.props.bot.loading) {
+      return (
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          className={classes.fullSpace}
+        >
+          <Grid item>
+            <Spinner name="folding-cube" color="white" />
+          </Grid>
+        </Grid>
+      );
+    }
+
+    if (this.props.bot.loaded && this.props.bot.error) {
+      return (
+        <Typography variant="h6" className={classes.subTitle}>
+          Some Thing went wrong
+        </Typography>
+      );
+    }
+    return (
+      <Grid container spacing={8}>
+        {_.map(this.props.bot.items, item => (
+          <Grid item xl={2} sm={4} md={3} key={item.assetid}>
+            <ItemThumnail component={item} />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
+
+  renderPlayerItems = classes => {
+    if (
+      !this.props.player.auth &&
+      !window.localStorage.getItem('tradewithme/user-id')
+    ) {
+      return (
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          className={classes.fullSpace}
+        >
+          <Grid item>
+            <Typography className={classes.steamNotloginText}>
+              YOU DID NOT LOGIN
+            </Typography>
+            <Typography className={classes.steamNotloginText}>
+              LOGIN VIA STEAM
+            </Typography>
+            <Button onClick={this.props.steamOauth}>
+              <img
+                src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
+                height={35}
+                width="auto"
+                alt="steam-authenticate-button"
+              />
+            </Button>
+          </Grid>
+        </Grid>
+      );
+    }
+    if (!this.props.player.loaded && this.props.player.loading) {
+      return (
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          className={classes.fullSpace}
+        >
+          <Grid item>
+            <Spinner name="folding-cube" color="white" />
+          </Grid>
+        </Grid>
+      );
+    }
+    if (this.props.player.loaded && this.props.player.error) {
+      return (
+        <Typography variant="h6" className={classes.subTitle}>
+          Some Thing went wrong
+        </Typography>
+      );
+    }
+    return (
+      <Grid container spacing={8}>
+        {_.map(this.props.player.items, item => (
+          <Grid item xl={2} sm={4} md={3} key={item.assetid}>
+            <ItemThumnail component={item} />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
 
   onChangePrice = field => event => {
     const value = typeof event === 'object' ? event.target.value : event;
@@ -148,6 +275,13 @@ export class Home extends React.Component {
     console.log('click refresh');
   };
 
+  toggleMenuPlayer = event => {
+    this.setState({
+      showPlayerMenu: !this.state.showPlayerMenu,
+      anchorEl: event ? event.currentTarget : null,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -159,22 +293,24 @@ export class Home extends React.Component {
         <div className="home-container">
           <AppBar position="static" className={classes.appBar}>
             <Toolbar>
-              <Typography variant="h6" color="inherit" className={classes.grow}>
+              <Typography
+                variant="h6"
+                color="inherit"
+                className={classes.tradeWithMe}
+              >
                 TRADE WITH ME
               </Typography>
-              {/* {auth && (
+              {this.props.player.auth || this.props.player.loading ? (
                 <div>
-                  <IconButton
-                    aria-owns={open ? 'menu-appbar' : undefined}
-                    aria-haspopup="true"
-                    onClick={this.handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
+                  <Avatar
+                    alt="Player avatar"
+                    src={this.props.player.info.avatar}
+                    className={classes.bigAvatar}
+                    onClick={this.toggleMenuPlayer}
+                  />
                   <Menu
                     id="menu-appbar"
-                    anchorEl={anchorEl}
+                    anchorEl={this.state.anchorEl}
                     anchorOrigin={{
                       vertical: 'top',
                       horizontal: 'right',
@@ -183,14 +319,22 @@ export class Home extends React.Component {
                       vertical: 'top',
                       horizontal: 'right',
                     }}
-                    open={open}
-                    onClose={this.handleClose}
+                    open={this.state.showPlayerMenu}
+                    onClose={this.toggleMenuPlayer}
                   >
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.props.logout}>Log out</MenuItem>
                   </Menu>
                 </div>
-              )} */}
+              ) : (
+                <Button onClick={this.props.steamOauth}>
+                  <img
+                    src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
+                    height={35}
+                    width="auto"
+                    alt="steam-authenticate-button"
+                  />
+                </Button>
+              )}
             </Toolbar>
           </AppBar>
           <div className="body">
@@ -230,10 +374,9 @@ export class Home extends React.Component {
                           <div className="refresh-icon-wrapper">
                             <Grid container justify="center">
                               <Grid item>
-                                <RefreshIcon
-                                  className={classes.icon}
-                                  onClick={this.refreshPlayerItems}
-                                />
+                                <Button onClick={this.refreshPlayerItems}>
+                                  <RefreshIcon className={classes.icon} />
+                                </Button>
                               </Grid>
                             </Grid>
                           </div>
@@ -302,7 +445,9 @@ export class Home extends React.Component {
                         </Grid>
                       </Grid>
                     </div>
-                    <div className="pad-10 select-area-body" id="items-list" />
+                    <div className="pad-10 select-area-body" id="items-list">
+                      {this.renderPlayerItems(classes)}
+                    </div>
                   </div>
                 </div>
               </Grid>
@@ -505,10 +650,9 @@ export class Home extends React.Component {
                           <div className="refresh-icon-wrapper">
                             <Grid container justify="center">
                               <Grid item>
-                                <RefreshIcon
-                                  className={classes.icon}
-                                  onClick={this.refreshPlayerItems}
-                                />
+                                <Button onClick={this.props.getBotItems}>
+                                  <RefreshIcon className={classes.icon} />
+                                </Button>
                               </Grid>
                             </Grid>
                           </div>
@@ -577,7 +721,9 @@ export class Home extends React.Component {
                         </Grid>
                       </Grid>
                     </div>
-                    <div className="pad-10 select-area-body" id="items-list" />
+                    <div className="pad-10 select-area-body" id="items-list">
+                      {this.renderBotItems(classes)}
+                    </div>
                   </div>
                 </div>
               </Grid>
@@ -598,16 +744,24 @@ Home.propTypes = {
   getBotItems: PropTypes.func.isRequired,
   callSteamAuthenticate: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  bot: PropTypes.object.isRequired,
+  player: PropTypes.object.isRequired,
+  steamOauth: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   home: makeSelectHome(),
+  bot: selectBot(),
+  player: selectUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getBotItems: () => dispatch(getBotItems()),
     callSteamAuthenticate: () => dispatch(callSteamAuthenticate()),
+    steamOauth: () => dispatch(steamOauth()),
+    logout: () => dispatch(logout()),
   };
 }
 

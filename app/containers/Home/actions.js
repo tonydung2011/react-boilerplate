@@ -13,6 +13,9 @@ import {
   GET_BOT_ITEMS,
   GET_BOT_ITEMS_SUCCESS,
   GET_BOT_ITEMS_FAIL,
+  GET_PROFILE_SUCCESS,
+  LOGOUT_STEAM,
+  STEAM_OAUTH,
 } from './constants';
 
 export function defaultAction() {
@@ -74,5 +77,22 @@ export function getBotItemsSuccess(data) {
 export function getBotItemsFail() {
   return {
     type: GET_BOT_ITEMS_FAIL,
+  };
+}
+export function steamOauth() {
+  return {
+    type: STEAM_OAUTH,
+  };
+}
+export function getProfileSuccess(data) {
+  return {
+    type: GET_PROFILE_SUCCESS,
+    data: data.response.players[0],
+  };
+}
+export function logout() {
+  window.localStorage.removeItem('tradewithme/user-id');
+  return {
+    type: LOGOUT_STEAM,
   };
 }
