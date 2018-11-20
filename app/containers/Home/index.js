@@ -36,12 +36,7 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectHome, { selectBot, selectUser } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import {
-  getBotItems,
-  callSteamAuthenticate,
-  steamOauth,
-  logout,
-} from './actions';
+import { getBotItems, callSteamAuthenticate, logout } from './actions';
 // import messages from './messages';
 
 const { createSliderWithTooltip } = Slider;
@@ -207,14 +202,14 @@ export class Home extends React.Component {
             <Typography className={classes.steamNotloginText}>
               LOGIN VIA STEAM
             </Typography>
-            <Button onClick={this.props.steamOauth}>
+            <a href={process.env.STEAM_OPENID_URL}>
               <img
                 src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
                 height={35}
                 width="auto"
                 alt="steam-authenticate-button"
               />
-            </Button>
+            </a>
           </Grid>
         </Grid>
       );
@@ -326,14 +321,14 @@ export class Home extends React.Component {
                   </Menu>
                 </div>
               ) : (
-                <Button onClick={this.props.steamOauth}>
+                <a href={process.env.STEAM_OPENID_URL}>
                   <img
                     src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png"
                     height={35}
                     width="auto"
                     alt="steam-authenticate-button"
                   />
-                </Button>
+                </a>
               )}
             </Toolbar>
           </AppBar>
@@ -746,7 +741,6 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
   bot: PropTypes.object.isRequired,
   player: PropTypes.object.isRequired,
-  steamOauth: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
 };
 
@@ -760,7 +754,6 @@ function mapDispatchToProps(dispatch) {
   return {
     getBotItems: () => dispatch(getBotItems()),
     callSteamAuthenticate: () => dispatch(callSteamAuthenticate()),
-    steamOauth: () => dispatch(steamOauth()),
     logout: () => dispatch(logout()),
   };
 }
