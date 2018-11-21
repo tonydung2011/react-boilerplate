@@ -34,10 +34,22 @@ import ItemThumnail from 'components/ItemThumnail';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Config from 'utils/config';
-import makeSelectHome, { selectBot, selectUser } from './selectors';
+import makeSelectHome, {
+  selectBot,
+  selectUser,
+  selectTrade,
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getBotItems, callSteamAuthenticate, logout } from './actions';
+import {
+  getBotItems,
+  callSteamAuthenticate,
+  logout,
+  selectPlayerItem,
+  selectBotItem,
+  removeBotItem,
+  removePlayerItem,
+} from './actions';
 // import messages from './messages';
 
 const { createSliderWithTooltip } = Slider;
@@ -119,13 +131,17 @@ export class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: {
+      botFilter: {
         minPrice: 0,
         maxPrice: 9999,
         hero: '',
         rarity: '',
+        order: '',
+        search: '',
       },
-      player: {
+      botItems: [],
+      playerItems: [],
+      playerFilter: {
         sort: '',
         search: '',
       },
@@ -133,22 +149,120 @@ export class Home extends React.Component {
     };
   }
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.bot !== this.props.bot) {
+      if (
+        nextProps.bot.loaded &&
+        !nextProps.bot.error &&
+        !nextProps.bot.loading
+      ) {
+        this.setState({
+          botItems: this.filterRemainingItems(
+            nextProps.bot.items,
+            this.props.trade.itemsReceive,
+          ),
+        });
+      }
+    }
+    if (nextProps.player !== this.props.player) {
+      if (
+        nextProps.player.loaded &&
+        !nextProps.player.error &&
+        !nextProps.player.loading
+      ) {
+        this.setState({
+          playerItems: this.filterRemainingItems(
+            nextProps.player.items,
+            this.props.trade.itemsOffer,
+          ),
+        });
+      }
+    }
+    if (nextProps.trade !== this.props.trade) {
+      if (
+        nextProps.trade.itemsReceive.length !==
+        this.props.trade.itemsReceive.length
+      ) {
+        this.setState({
+          botItems: this.filterRemainingItems(
+            this.props.bot.items,
+            nextProps.trade.itemsReceive,
+          ),
+        });
+        console.log('an item of bot has been selected');
+      }
+      if (
+        nextProps.trade.itemsOffer.length !== this.props.trade.itemsOffer.length
+      ) {
+        this.setState({
+          playerItems: this.filterRemainingItems(
+            this.props.player.items,
+            nextProps.trade.itemsOffer,
+          ),
+        });
+        console.log('an item of player has been selected');
+      }
+    }
+  };
+
+  filterRemainingItems = (source, selected) =>
+    _.filter(
+      source,
+      item => !_.includes(_.map(selected, i => i.assetid), item.assetid),
+    );
+
   componentWillMount = () => {
     this.props.getBotItems();
     this.props.callSteamAuthenticate();
   };
 
-  renderSelectedItemYou = classes => (
-    <Typography className={classes.subTitle}>
-      SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
-    </Typography>
-  );
+  renderSelectedItemPLayer = classes =>
+    this.props.trade.itemsOffer.length === 0 ? (
+      <Typography className={classes.subTitle}>
+        SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
+      </Typography>
+    ) : (
+      <Grid container spacing={8}>
+        {_.map(this.props.trade.itemsOffer, item => (
+          <Grid
+            item
+            xl={2}
+            sm={4}
+            md={3}
+            key={`player-selected-item-${item.assetid}`}
+          >
+            <ItemThumnail
+              component={item}
+              onClickHandler={() => this.props.removePlayerItem(item)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    );
 
-  renderSelectedItemBot = classes => (
-    <Typography className={classes.subTitle}>
-      SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
-    </Typography>
-  );
+  renderSelectedItemBot = classes =>
+    this.props.trade.itemsReceive.length === 0 ? (
+      <Typography className={classes.subTitle}>
+        SELECT THE ITEMS YOU WANT TO RECIEVE FROM THE INVENTORY BOX BELOW
+      </Typography>
+    ) : (
+      <Grid container spacing={8}>
+        {_.map(this.props.trade.itemsReceive, item => (
+          <Grid
+            item
+            xl={2}
+            sm={4}
+            md={3}
+            key={`bot-selected-item-${item.assetid}`}
+          >
+            <ItemThumnail
+              component={item}
+              onClickHandler={() => this.props.removeBotItem(item)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    );
 
   renderBotItems = classes => {
     if (!this.props.bot.loaded && this.props.bot.loading) {
@@ -175,9 +289,12 @@ export class Home extends React.Component {
     }
     return (
       <Grid container spacing={8}>
-        {_.map(this.props.bot.items, item => (
-          <Grid item xl={2} sm={4} md={3} key={item.assetid}>
-            <ItemThumnail component={item} />
+        {_.map(this.state.botItems, item => (
+          <Grid item xl={2} sm={4} md={3} key={`bot-item-${item.assetid}`}>
+            <ItemThumnail
+              component={item}
+              onClickHandler={() => this.props.selectBotItem(item)}
+            />
           </Grid>
         ))}
       </Grid>
@@ -238,20 +355,23 @@ export class Home extends React.Component {
     }
     return (
       <Grid container spacing={8}>
-        {_.map(this.props.player.items, item => (
-          <Grid item xl={2} sm={4} md={3} key={item.assetid}>
-            <ItemThumnail component={item} />
+        {_.map(this.state.playerItems, item => (
+          <Grid item xl={2} sm={4} md={3} key={`player-item-${item.assetid}`}>
+            <ItemThumnail
+              component={item}
+              onClickHandler={() => this.props.selectPlayerItem(item)}
+            />
           </Grid>
         ))}
       </Grid>
     );
   };
 
-  onChangePrice = field => event => {
+  onChangeBot = field => event => {
     const value = typeof event === 'object' ? event.target.value : event;
     this.setState({
-      filter: {
-        ...this.state.filter,
+      botFilter: {
+        ...this.state.botFilter,
         [field]: value || 0,
       },
     });
@@ -260,8 +380,8 @@ export class Home extends React.Component {
   onChangePlayer = field => event => {
     const value = typeof event === 'object' ? event.target.value : event;
     this.setState({
-      player: {
-        ...this.state.player,
+      playerFilter: {
+        ...this.state.playerFilter,
         [field]: value,
       },
     });
@@ -358,7 +478,7 @@ export class Home extends React.Component {
                     </Grid>
                   </div>
                   <div className="pad-10 select-area-body">
-                    {this.renderSelectedItemYou(classes)}
+                    {this.renderSelectedItemPLayer(classes)}
                   </div>
                 </div>
                 <br />
@@ -382,7 +502,7 @@ export class Home extends React.Component {
                             id="item-player-order-field"
                             label="Order"
                             className={classes.input}
-                            value={this.state.player.sort}
+                            value={this.state.playerFilter.sort}
                             onChange={this.onChangePlayer('sort')}
                             select
                             SelectProps={{
@@ -420,7 +540,7 @@ export class Home extends React.Component {
                             className={classes.input}
                             id="item-player-search-field"
                             label="Search"
-                            value={this.state.player.search}
+                            value={this.state.playerFilter.search}
                             onChange={this.onChangePlayer('search')}
                             margin="dense"
                             fullWidth
@@ -483,8 +603,8 @@ export class Home extends React.Component {
                             className={classes.input}
                             id="item-filter-min-price"
                             label="Min"
-                            value={this.state.filter.minPrice}
-                            onChange={this.onChangePrice('minPrice')}
+                            value={this.state.botFilter.minPrice}
+                            onChange={this.onChangeBot('minPrice')}
                             type="number"
                             InputProps={{
                               className: classes.textFieldInput,
@@ -507,8 +627,8 @@ export class Home extends React.Component {
                             className={classes.input}
                             id="item-filter-max-price"
                             label="Max"
-                            value={this.state.filter.maxPrice}
-                            onChange={this.onChangePrice('maxPrice')}
+                            value={this.state.botFilter.maxPrice}
+                            onChange={this.onChangeBot('maxPrice')}
                             type="number"
                             InputProps={{
                               className: classes.textFieldInput,
@@ -533,12 +653,12 @@ export class Home extends React.Component {
                         max={9999}
                         defaultValue={[3, 9999]}
                         value={[
-                          this.state.filter.minPrice,
-                          this.state.filter.maxPrice,
+                          this.state.botFilter.minPrice,
+                          this.state.botFilter.maxPrice,
                         ]}
                         onChange={arg => {
-                          this.onChangePrice('minPrice')(arg[0]);
-                          this.onChangePrice('maxPrice')(arg[1]);
+                          this.onChangeBot('minPrice')(arg[0]);
+                          this.onChangeBot('maxPrice')(arg[1]);
                         }}
                         tipFormatter={value => `${value}$`}
                       />
@@ -548,8 +668,8 @@ export class Home extends React.Component {
                         className={classes.input}
                         id="item-filter-hero"
                         label="Hero"
-                        value={this.state.filter.hero}
-                        onChange={this.onChangePrice('hero')}
+                        value={this.state.botFilter.hero}
+                        onChange={this.onChangeBot('hero')}
                         InputProps={{
                           className: classes.textFieldInput,
                           classes: {
@@ -572,8 +692,8 @@ export class Home extends React.Component {
                         className={classes.input}
                         id="item-filter-rarity"
                         label="Rarity"
-                        value={this.state.filter.rarity}
-                        onChange={this.onChangePrice('rarity')}
+                        value={this.state.botFilter.rarity}
+                        onChange={this.onChangeBot('rarity')}
                         SelectProps={{
                           native: true,
                           inputProps: {
@@ -659,8 +779,8 @@ export class Home extends React.Component {
                             select
                             label="Order"
                             className={classes.input}
-                            value={this.state.player.sort}
-                            onChange={this.onChangePlayer('sort')}
+                            value={this.state.botFilter.sort}
+                            onChange={this.onChangeBot('sort')}
                             SelectProps={{
                               native: true,
                               inputProps: {
@@ -696,8 +816,8 @@ export class Home extends React.Component {
                             className={classes.input}
                             id="item-player-search-field"
                             label="Search"
-                            value={this.state.player.search}
-                            onChange={this.onChangePlayer('search')}
+                            value={this.state.botFilter.search}
+                            onChange={this.onChangeBot('search')}
                             margin="dense"
                             fullWidth
                             InputProps={{
@@ -742,13 +862,19 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
   bot: PropTypes.object.isRequired,
   player: PropTypes.object.isRequired,
+  trade: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
+  selectPlayerItem: PropTypes.func.isRequired,
+  selectBotItem: PropTypes.func.isRequired,
+  removeBotItem: PropTypes.func.isRequired,
+  removePlayerItem: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   home: makeSelectHome(),
   bot: selectBot(),
   player: selectUser(),
+  trade: selectTrade(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -756,6 +882,10 @@ function mapDispatchToProps(dispatch) {
     getBotItems: () => dispatch(getBotItems()),
     callSteamAuthenticate: () => dispatch(callSteamAuthenticate()),
     logout: () => dispatch(logout()),
+    selectPlayerItem: item => dispatch(selectPlayerItem(item)),
+    selectBotItem: item => dispatch(selectBotItem(item)),
+    removeBotItem: item => dispatch(removeBotItem(item)),
+    removePlayerItem: item => dispatch(removePlayerItem(item)),
   };
 }
 

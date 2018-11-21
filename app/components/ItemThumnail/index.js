@@ -8,7 +8,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactHover from 'react-hover';
 import _ from 'lodash';
-import { Typography, withStyles } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import uuid from 'uuid/v1';
 
 const optionsCursorTrueWithMargin = {
   followCursor: true,
@@ -27,11 +29,11 @@ const getValueFromTag = (tags, category) => {
   return tag && tag.localized_tag_name ? tag.localized_tag_name : '';
 };
 
-function ItemThumnail({ component, classes }) {
+function ItemThumnail({ component, classes, onClickHandler }) {
   return (
-    <ReactHover options={optionsCursorTrueWithMargin}>
+    <ReactHover options={optionsCursorTrueWithMargin} key={uuid()}>
       <ReactHover.Trigger type="trigger">
-        <div>
+        <div onClick={onClickHandler}> {/* eslint-disable-line */}
           <img
             src={component.image}
             width="100%"
@@ -77,6 +79,7 @@ function ItemThumnail({ component, classes }) {
 ItemThumnail.propTypes = {
   component: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  onClickHandler: PropTypes.func,
 };
 
 export default withStyles(style)(ItemThumnail);

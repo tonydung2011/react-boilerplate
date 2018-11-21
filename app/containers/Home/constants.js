@@ -14,3 +14,7 @@ export const GET_BOT_ITEMS_SUCCESS = 'app/Home/GET_BOT_ITEMS_SUCCESS';
 export const GET_BOT_ITEMS_FAIL = 'app/Home/GET_BOT_ITEMS_FAIL';
 export const STEAM_OAUTH = 'app/Home/STEAM_OAUTH';
 export const LOGOUT_STEAM = 'app/Home/LOGOUT_STEAM';
+export const SELECT_PLAYER_ITEM = 'app/Home/SELECT_PLAYER_ITEM';
+export const REMOVE_PLAYER_ITEM = 'app/Home/REMOVE_PLAYER_ITEM';
+export const SELECT_BOT_ITEM = 'app/Home/SELECT_BOT_ITEM';
+export const REMOVE_BOT_ITEM = 'app/Home/REMOVE_BOT_ITEM';

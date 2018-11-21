@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   AUTHENTICATE_SUCCESS,
@@ -15,6 +16,10 @@ import {
   CALL_STEAM_AUTHENTICATE,
   GET_PROFILE_SUCCESS,
   LOGOUT_STEAM,
+  REMOVE_PLAYER_ITEM,
+  REMOVE_BOT_ITEM,
+  SELECT_PLAYER_ITEM,
+  SELECT_BOT_ITEM,
 } from './constants';
 
 const botList = JSON.parse(process.env.BOT_LIST);
@@ -38,7 +43,7 @@ export const initialState = fromJS({
   },
   trade: {
     urlTrade: '',
-    itemsOfferd: [],
+    itemsOffer: [],
     itemsReceive: [],
   },
 });
@@ -91,6 +96,54 @@ function homeReducer(state = initialState, action) {
         .setIn(['user', 'auth'], false)
         .setIn(['user', 'info'], fromJS({}))
         .setIn(['user', 'items'], fromJS([]));
+    case SELECT_PLAYER_ITEM:
+      return state.setIn(
+        ['trade', 'itemsOffer'],
+        fromJS([
+          ...state
+            .get('trade')
+            .get('itemsOffer')
+            .toJS(),
+          action.item,
+        ]),
+      );
+    case SELECT_BOT_ITEM:
+      return state.setIn(
+        ['trade', 'itemsReceive'],
+        fromJS([
+          ...state
+            .get('trade')
+            .get('itemsReceive')
+            .toJS(),
+          action.item,
+        ]),
+      );
+    case REMOVE_PLAYER_ITEM:
+      return state.setIn(
+        ['trade', 'itemsOffer'],
+        fromJS(
+          _.filter(
+            state
+              .get('trade')
+              .get('itemsOffer')
+              .toJS(),
+            i => i.assetid !== action.item.assetid,
+          ),
+        ),
+      );
+    case REMOVE_BOT_ITEM:
+      return state.setIn(
+        ['trade', 'itemsReceive'],
+        fromJS(
+          _.filter(
+            state
+              .get('trade')
+              .get('itemsReceive')
+              .toJS(),
+            i => i.assetid !== action.item.assetid,
+          ),
+        ),
+      );
     default:
       return state;
   }

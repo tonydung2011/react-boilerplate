@@ -16,6 +16,10 @@ import {
   GET_PROFILE_SUCCESS,
   LOGOUT_STEAM,
   STEAM_OAUTH,
+  SELECT_PLAYER_ITEM,
+  REMOVE_PLAYER_ITEM,
+  SELECT_BOT_ITEM,
+  REMOVE_BOT_ITEM,
 } from './constants';
 
 export function defaultAction() {
@@ -94,5 +98,29 @@ export function logout() {
   window.localStorage.removeItem('tradewithme/user-id');
   return {
     type: LOGOUT_STEAM,
+  };
+}
+export function selectPlayerItem(item) {
+  return {
+    type: SELECT_PLAYER_ITEM,
+    item,
+  };
+}
+export function removePlayerItem(item) {
+  return {
+    type: REMOVE_PLAYER_ITEM,
+    item,
+  };
+}
+export function selectBotItem(item) {
+  return {
+    type: SELECT_BOT_ITEM,
+    item,
+  };
+}
+export function removeBotItem(item) {
+  return {
+    type: REMOVE_BOT_ITEM,
+    item,
   };
 }
