@@ -124,6 +124,12 @@ const styles = () => ({
   tradeWithMe: {
     flexGrow: 1,
   },
+  helperTextDefault: {
+    color: 'white',
+  },
+  helperTextError: {
+    color: 'green',
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -189,7 +195,6 @@ export class Home extends React.Component {
             nextProps.trade.itemsReceive,
           ),
         });
-        console.log('an item of bot has been selected');
       }
       if (
         nextProps.trade.itemsOffer.length !== this.props.trade.itemsOffer.length
@@ -200,7 +205,6 @@ export class Home extends React.Component {
             nextProps.trade.itemsOffer,
           ),
         });
-        console.log('an item of player has been selected');
       }
     }
   };
@@ -396,6 +400,28 @@ export class Home extends React.Component {
       showPlayerMenu: !this.state.showPlayerMenu,
       anchorEl: event ? event.currentTarget : null,
     });
+  };
+
+  isFilterInvalid = () => {
+    if (this.state.botFilter.minPrice > this.state.botFilter.maxPrice) {
+      return true;
+    }
+    return false;
+  };
+
+  getHelperText = (key, ...arg) => {
+    switch (key) {
+      case 'price':
+        if (this.isFilterInvalid()) {
+          return 'Max price cannot smaller than min price';
+        }
+        return arg[0] === 'min'
+          ? 'Custom your minium price'
+          : 'Custom your maxium price';
+
+      default:
+        return '';
+    }
   };
 
   render() {
@@ -600,11 +626,16 @@ export class Home extends React.Component {
                       <Grid container spacing={8}>
                         <Grid item sm={6}>
                           <TextField
+                            error={this.isFilterInvalid()}
                             className={classes.input}
                             id="item-filter-min-price"
                             label="Min"
                             value={this.state.botFilter.minPrice}
-                            onChange={this.onChangeBot('minPrice')}
+                            onChange={e =>
+                              this.onChangeBot('minPrice')(
+                                parseInt(e.target.value, 10),
+                              )
+                            }
                             type="number"
                             InputProps={{
                               className: classes.textFieldInput,
@@ -618,17 +649,29 @@ export class Home extends React.Component {
                                 focused: classes.formLabelFocused,
                               },
                             }}
+                            FormHelperTextProps={{
+                              classes: {
+                                root: classes.helperTextDefault,
+                                error: classes.helperTextError,
+                              },
+                            }}
                             margin="dense"
                             fullWidth
+                            helperText={this.getHelperText('price', 'min')}
                           />
                         </Grid>
                         <Grid item sm={6}>
                           <TextField
+                            error={this.isFilterInvalid()}
                             className={classes.input}
                             id="item-filter-max-price"
                             label="Max"
                             value={this.state.botFilter.maxPrice}
-                            onChange={this.onChangeBot('maxPrice')}
+                            onChange={e =>
+                              this.onChangeBot('maxPrice')(
+                                parseInt(e.target.value, 10),
+                              )
+                            }
                             type="number"
                             InputProps={{
                               className: classes.textFieldInput,
@@ -642,8 +685,15 @@ export class Home extends React.Component {
                                 focused: classes.formLabelFocused,
                               },
                             }}
+                            FormHelperTextProps={{
+                              classes: {
+                                root: classes.helperTextDefault,
+                                error: classes.helperTextError,
+                              },
+                            }}
                             margin="dense"
                             fullWidth
+                            helperText={this.getHelperText('price', 'max')}
                           />
                         </Grid>
                       </Grid>
@@ -657,8 +707,12 @@ export class Home extends React.Component {
                           this.state.botFilter.maxPrice,
                         ]}
                         onChange={arg => {
-                          this.onChangeBot('minPrice')(arg[0]);
-                          this.onChangeBot('maxPrice')(arg[1]);
+                          if (arg[0] !== this.state.botFilter.minPrice) {
+                            this.onChangeBot('minPrice')(arg[0]);
+                          }
+                          if (arg[1] !== this.state.botFilter.maxPrice) {
+                            this.onChangeBot('maxPrice')(arg[1]);
+                          }
                         }}
                         tipFormatter={value => `${value}$`}
                       />
