@@ -54,6 +54,7 @@ export class Admin extends React.Component {
       minPrice: '',
       maxPrice: '',
       sort: '',
+      overstock: '',
     };
   }
 
@@ -105,12 +106,19 @@ export class Admin extends React.Component {
     });
   };
 
+  onOverstockChange = e => {
+    this.setState({
+      overstock: e.target.value,
+    });
+  };
+
   updateData = () => {
     const selectedItems = this.table.state.selection; /* eslint-disable-line */
     const updateData = selectedItems.map(item => ({
       market_hash_name: item.market_hash_name,
       tradable: this.state.tradable,
       marketRate: this.state.marketRate,
+      overstock: this.state.overstock,
     }));
     this.props.updateDotaItems(updateData);
   };
@@ -144,7 +152,7 @@ export class Admin extends React.Component {
           </Grid>
         </Grid>
         <Grid container justify="flex-start" className={classes.grid}>
-          <Grid item md={6}>
+          <Grid item md={4}>
             <Button
               variant="contained"
               color="primary"
@@ -153,7 +161,7 @@ export class Admin extends React.Component {
               <FormattedMessage {...messages.reload} />
             </Button>
           </Grid>
-          <Grid item md={6}>
+          <Grid item md={8}>
             <Grid container>
               <Grid item md={2}>
                 <FormControl className={classes.formControl}>
@@ -190,6 +198,17 @@ export class Admin extends React.Component {
                 </TextField>
               </Grid>
               <Grid item md={3}>
+                <TextField
+                  className={classes.textField}
+                  id="overstock"
+                  label="Overstock"
+                  value={this.state.overstock}
+                  onChange={this.onOverstockChange}
+                  margin="dense"
+                  type="number"
+                />
+              </Grid>
+              <Grid item md={3}>
                 <Button
                   variant="contained"
                   color="secondary"
@@ -198,7 +217,6 @@ export class Admin extends React.Component {
                   <FormattedMessage {...messages.update} />
                 </Button>
               </Grid>
-              <Grid item md={3} />
             </Grid>
           </Grid>
         </Grid>

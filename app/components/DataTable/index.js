@@ -143,6 +143,11 @@ class DataTable extends React.Component {
             sortable: false,
           },
           {
+            Header: 'Overstock',
+            accessor: 'overstock',
+            sortable: false,
+          },
+          {
             Header: 'Tradable',
             accessor: 'tradable',
             sortable: false,
