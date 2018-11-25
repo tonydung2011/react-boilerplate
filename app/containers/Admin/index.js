@@ -123,6 +123,7 @@ export class Admin extends React.Component {
       minPrice: this.state.minPrice,
       maxPrice: this.state.maxPrice,
       marketRate: this.state.marketRate,
+      sort: this.state.sort,
     });
   };
 
@@ -248,23 +249,24 @@ export class Admin extends React.Component {
             />
           </Grid>
           <Grid item md={2}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="sort-simple">Sort</InputLabel>
-              <Select
-                fullWidth
-                value={this.state.sort}
-                onChange={this.onChangeSort}
-                inputProps={{
-                  name: 'sort',
-                  id: 'sort-id',
-                }}
-              >
-                <MenuItem value="price">Price</MenuItem>
-                <MenuItem value="name">Name</MenuItem>
-                <MenuItem value="hero">hero</MenuItem>
-                <MenuItem value="rarity">rarity</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              select
+              className={classes.input}
+              id="sort-type"
+              label="Sort By"
+              value={this.state.sort}
+              onChange={this.onChangeSort}
+              margin="dense"
+              fullWidth
+            >
+              <option value="">All</option>
+              <option value="price-24h">latest 24h price</option>
+              <option value="price-7d">latest 7d price</option>
+              <option value="price-30d">latest 30 days price</option>
+              <option value="name">name</option>
+              <option value="hero">hero</option>
+              <option value="rarity">rarity</option>
+            </TextField>
           </Grid>
         </Grid>
         <br />
