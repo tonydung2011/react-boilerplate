@@ -37,8 +37,8 @@ export const initialState = fromJS({
   marketHashName: '',
   rarity: '',
   hero: '',
-  minPrice: undefined,
-  maxPrice: undefined,
+  minPrice: '',
+  maxPrice: '',
   sort: 'price',
 });
 

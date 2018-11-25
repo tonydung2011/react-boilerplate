@@ -173,6 +173,7 @@ export class Admin extends React.Component {
               </Grid>
               <Grid item md={4}>
                 <TextField
+                  select
                   className={classes.textField}
                   id="market-rate"
                   label="Market rate"
@@ -180,7 +181,13 @@ export class Admin extends React.Component {
                   onChange={this.onMarketRateEditChange}
                   margin="dense"
                   type="number"
-                />
+                >
+                  <option value={0.85}>85%</option>
+                  <option value={0.9}>90%</option>
+                  <option value={0.95}>95%</option>
+                  <option value={1}>100%</option>
+                  <option value={1.05}>105%</option>
+                </TextField>
               </Grid>
               <Grid item md={3}>
                 <Button
