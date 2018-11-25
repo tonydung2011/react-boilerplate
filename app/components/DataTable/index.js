@@ -125,7 +125,7 @@ class DataTable extends React.Component {
           },
           {
             Header: 'Prices',
-            accessor: d => d.prices.safe_ts.last_24h,
+            accessor: d => d.prices.safe_ts.last_7d * d.marketRate,
             id: 'prices-latest',
             sortable: false,
           },
