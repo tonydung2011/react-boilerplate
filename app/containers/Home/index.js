@@ -132,6 +132,11 @@ const styles = () => ({
   },
 });
 
+const getValueFromTag = (tags, category) => {
+  const tag = _.find(tags, t => t.category === category);
+  return tag && tag.localized_tag_name ? tag.localized_tag_name : '';
+};
+
 /* eslint-disable react/prefer-stateless-function */
 export class Home extends React.Component {
   constructor(props) {
@@ -148,7 +153,7 @@ export class Home extends React.Component {
       botItems: [],
       playerItems: [],
       playerFilter: {
-        sort: '',
+        order: '',
         search: '',
       },
       showPlayerMenu: false,
@@ -293,7 +298,7 @@ export class Home extends React.Component {
     }
     return (
       <Grid container spacing={8}>
-        {_.map(this.state.botItems, item => (
+        {_.map(this.botFilter(this.state.botItems), item => (
           <Grid item xl={2} sm={4} md={3} key={`bot-item-${item.assetid}`}>
             <ItemThumnail
               component={item}
@@ -359,7 +364,7 @@ export class Home extends React.Component {
     }
     return (
       <Grid container spacing={8}>
-        {_.map(this.state.playerItems, item => (
+        {_.map(this.playerFilter(this.state.playerItems), item => (
           <Grid item xl={2} sm={4} md={3} key={`player-item-${item.assetid}`}>
             <ItemThumnail
               component={item}
@@ -372,27 +377,29 @@ export class Home extends React.Component {
   };
 
   onChangeBot = field => event => {
-    const value = typeof event === 'object' ? event.target.value : event;
+    let value = typeof event === 'object' ? event.target.value : event;
+    if (!value) {
+      value = field === 'minPrice' || field === 'maxPrice' ? 0 : '';
+    }
     this.setState({
       botFilter: {
         ...this.state.botFilter,
-        [field]: value || 0,
+        [field]: value,
       },
     });
   };
 
   onChangePlayer = field => event => {
-    const value = typeof event === 'object' ? event.target.value : event;
+    let value = typeof event === 'object' ? event.target.value : event;
+    if (!value) {
+      value = field === 'minPrice' || field === 'maxPrice' ? 0 : '';
+    }
     this.setState({
       playerFilter: {
         ...this.state.playerFilter,
         [field]: value,
       },
     });
-  };
-
-  refreshPlayerItems = () => {
-    console.log('click refresh');
   };
 
   toggleMenuPlayer = event => {
@@ -422,6 +429,80 @@ export class Home extends React.Component {
       default:
         return '';
     }
+  };
+
+  botFilter = () => {
+    let { botItems } = this.state;
+    if (this.state.botFilter.minPrice <= this.state.botFilter.maxPrice) {
+      botItems = _.filter(
+        botItems,
+        i =>
+          i.price >= this.state.botFilter.minPrice &&
+          i.price <= this.state.botFilter.maxPrice,
+      );
+    }
+    const heroReg = new RegExp(this.state.botFilter.hero, 'i');
+    const rarityReg = new RegExp(this.state.botFilter.rarity, 'i');
+    const nameReg = new RegExp(this.state.botFilter.search, 'i');
+
+    botItems = _.filter(
+      botItems,
+      item =>
+        heroReg.test(getValueFromTag(item.tags).toLowerCase()) &&
+        rarityReg.test(item.rarity.toLowerCase()) &&
+        nameReg.test(item.market_hash_name.toLowerCase()),
+    );
+
+    switch (this.state.botFilter.order) {
+      case 'price':
+        botItems = _.sortBy(botItems, i => i.price);
+        break;
+      case 'name':
+        botItems = _.sortBy(botItems, i => i.market_hash_name.toLowerCase());
+        break;
+      case 'hero':
+        botItems = _.sortBy(botItems, i =>
+          getValueFromTag(i.tags).toLowerCase(),
+        );
+        break;
+      case 'rarity':
+        botItems = _.sortBy(botItems, i => i.rarity.toLowerCase());
+        break;
+      default:
+        break;
+    }
+    return botItems;
+  };
+
+  playerFilter = () => {
+    let { playerItems } = this.state;
+    const nameReg = new RegExp(this.state.playerFilter.search, 'i');
+
+    playerItems = _.filter(playerItems, item =>
+      nameReg.test(item.market_hash_name.toLowerCase()),
+    );
+
+    switch (this.state.playerFilter.order) {
+      case 'price':
+        playerItems = _.sortBy(playerItems, i => i.price);
+        break;
+      case 'name':
+        playerItems = _.sortBy(playerItems, i =>
+          i.market_hash_name.toLowerCase(),
+        );
+        break;
+      case 'hero':
+        playerItems = _.sortBy(playerItems, i =>
+          getValueFromTag(i.tags).toLowerCase(),
+        );
+        break;
+      case 'rarity':
+        playerItems = _.sortBy(playerItems, i => i.rarity.toLowerCase());
+        break;
+      default:
+        break;
+    }
+    return playerItems;
   };
 
   render() {
@@ -516,7 +597,9 @@ export class Home extends React.Component {
                           <div className="refresh-icon-wrapper">
                             <Grid container justify="center">
                               <Grid item>
-                                <Button onClick={this.refreshPlayerItems}>
+                                <Button
+                                  onClick={this.props.callSteamAuthenticate}
+                                >
                                   <RefreshIcon className={classes.icon} />
                                 </Button>
                               </Grid>
@@ -528,8 +611,8 @@ export class Home extends React.Component {
                             id="item-player-order-field"
                             label="Order"
                             className={classes.input}
-                            value={this.state.playerFilter.sort}
-                            onChange={this.onChangePlayer('sort')}
+                            value={this.state.playerFilter.order}
+                            onChange={this.onChangePlayer('order')}
                             select
                             SelectProps={{
                               native: true,
