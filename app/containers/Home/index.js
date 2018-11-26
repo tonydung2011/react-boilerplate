@@ -130,6 +130,10 @@ const styles = () => ({
   helperTextError: {
     color: 'green',
   },
+  username: {
+    margin: 'auto 0',
+    color: 'white',
+  },
 });
 
 const getValueFromTag = (tags, category) => {
@@ -524,29 +528,34 @@ export class Home extends React.Component {
                 TRADE WITH ME
               </Typography>
               {this.props.player.auth || this.props.player.loading ? (
-                <div>
-                  <Avatar
-                    alt="Player avatar"
-                    src={this.props.player.info.avatar}
-                    className={classes.bigAvatar}
-                    onClick={this.toggleMenuPlayer}
-                  />
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={this.state.anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={this.state.showPlayerMenu}
-                    onClose={this.toggleMenuPlayer}
-                  >
-                    <MenuItem onClick={this.props.logout}>Log out</MenuItem>
-                  </Menu>
+                <div className="row-direction">
+                  <Typography className={classes.username} variant="subheading">
+                    {this.props.player.info.personaname}
+                  </Typography>
+                  <div className="margin-left-20">
+                    <Avatar
+                      alt="Player avatar"
+                      src={this.props.player.info.avatar}
+                      className={classes.bigAvatar}
+                      onClick={this.toggleMenuPlayer}
+                    />
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={this.state.anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={this.state.showPlayerMenu}
+                      onClose={this.toggleMenuPlayer}
+                    >
+                      <MenuItem onClick={this.props.logout}>Log out</MenuItem>
+                    </Menu>
+                  </div>
                 </div>
               ) : (
                 <a href={Config.steamOpenIdUrl}>

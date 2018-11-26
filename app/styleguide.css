@@ -2,7 +2,7 @@
     padding-left: 5px
 }
 .margin-left-10 {
-    padding-left: 5px
+    margin-left: 5px
 }
 
 .pad-10 {
@@ -74,4 +74,9 @@
 
 .refresh-icon-wrapper {
     margin-top: 16px;
+}
+
+.row-direction {
+    flex-direction: row;
+    display: flex;
 }
