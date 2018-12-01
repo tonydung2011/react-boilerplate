@@ -15,7 +15,6 @@ import {
   GET_BOT_ITEMS_FAIL,
   GET_PROFILE_SUCCESS,
   LOGOUT_STEAM,
-  STEAM_OAUTH,
   SELECT_PLAYER_ITEM,
   REMOVE_PLAYER_ITEM,
   SELECT_BOT_ITEM,
@@ -83,11 +82,6 @@ export function getBotItemsSuccess(data) {
 export function getBotItemsFail() {
   return {
     type: GET_BOT_ITEMS_FAIL,
-  };
-}
-export function steamOauth() {
-  return {
-    type: STEAM_OAUTH,
   };
 }
 export function getProfileSuccess(data) {

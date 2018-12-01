@@ -22,6 +22,9 @@ const style = () => ({
   whiteText: {
     color: 'white',
   },
+  priceText: {
+    color: '#EEF1BD',
+  },
 });
 
 const getValueFromTag = (tags, category) => {
@@ -43,6 +46,9 @@ function ItemThumnail({ component, classes, onClickHandler }) {
           />
           <Typography className={classes.whiteText}>
             {component.name}
+          </Typography>
+          <Typography className={classes.priceText} variant="subheading">
+            {component.price}
           </Typography>
         </div>
       </ReactHover.Trigger>
