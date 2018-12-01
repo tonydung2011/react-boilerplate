@@ -29,10 +29,9 @@ export function* getBotItemsSaga() {
     .get('bot')
     .get('id');
   try {
-    const res = yield call(
-      request,
-      `${process.env.GET_PLAYER_INVENTORY}${botId}`,
-    );
+    const url = new URL(process.env.GET_BOT_ITEMS);
+    url.searchParams.append('bot', botId);
+    const res = yield call(request, url);
     yield put(getBotItemsSuccess(res));
   } catch (error) {
     yield put(getBotItemsFail());

@@ -22,8 +22,6 @@ import {
   SELECT_BOT_ITEM,
 } from './constants';
 
-const botList = JSON.parse(process.env.BOT_LIST);
-
 export const initialState = fromJS({
   user: {
     auth: false,
@@ -34,7 +32,7 @@ export const initialState = fromJS({
     info: {},
   },
   bot: {
-    id: botList[0],
+    id: 0,
     name: '1',
     items: [],
     loading: false,
