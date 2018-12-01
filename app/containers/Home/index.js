@@ -372,12 +372,38 @@ export class Home extends React.Component {
           <Grid item xl={2} sm={4} md={3} key={`player-item-${item.assetid}`}>
             <ItemThumnail
               component={item}
+              validate={this.validateItem(item)}
               onClickHandler={() => this.props.selectPlayerItem(item)}
             />
           </Grid>
         ))}
       </Grid>
     );
+  };
+
+  validateItem = item => {
+    if (!item.tradable) {
+      return {
+        valide: false,
+        state: 'Unavailable',
+      };
+    }
+    if (item.overstock) {
+      const itemCounts = _.countBy(
+        this.props.trade.itemsOffer,
+        i => i.market_hash_name,
+      );
+      const numberItem = itemCounts[item.market_hash_name] || 0;
+      if (numberItem >= parseInt(item.overstock, 10)) {
+        return {
+          valid: false,
+          state: 'Over Stock',
+        };
+      }
+    }
+    return {
+      valid: true,
+    };
   };
 
   onChangeBot = field => event => {
@@ -588,7 +614,13 @@ export class Home extends React.Component {
                           variant="subtitle1"
                           className={`text-align-right ${classes.subTitle}`}
                         >
-                          Money
+                          {_.round(
+                            _.sumBy(this.props.trade.itemsOffer, i =>
+                              _.round(i.price, 4),
+                            ),
+                            4,
+                          )}{' '}
+                          $
                         </Typography>
                       </Grid>
                     </Grid>
@@ -886,7 +918,13 @@ export class Home extends React.Component {
                           variant="subtitle1"
                           className={`text-align-left ${classes.subTitle}`}
                         >
-                          Money
+                          {_.round(
+                            _.sumBy(this.props.trade.itemsReceive, i =>
+                              _.round(i.price, 4),
+                            ),
+                            4,
+                          )}{' '}
+                          $
                         </Typography>
                       </Grid>
                       <Grid item xs={6}>

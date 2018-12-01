@@ -46,6 +46,9 @@ export function steamAuthenticateSuccess(data) {
       market_marketable_restriction: item.market_marketable_restriction,
       marketable: item.marketable,
       tags: item.tags,
+      price: item.price,
+      tradable: item.tradable,
+      overstock: item.overstock,
     })),
   };
 }
