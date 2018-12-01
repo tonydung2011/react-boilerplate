@@ -104,7 +104,7 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
                 width: '12rem',
               }}
             >
-              <Typography variant="body" className={classes.disableText}>
+              <Typography variant="body1" className={classes.disableText}>
                 {getHelpText(validate.state)}
               </Typography>
             </div>

@@ -471,14 +471,14 @@ export class Home extends React.Component {
           i.price <= this.state.botFilter.maxPrice,
       );
     }
-    const heroReg = new RegExp(this.state.botFilter.hero, 'i');
+    const heroReg = new RegExp(this.state.botFilter.hero.toLowerCase(), 'i');
     const rarityReg = new RegExp(this.state.botFilter.rarity, 'i');
     const nameReg = new RegExp(this.state.botFilter.search, 'i');
 
     botItems = _.filter(
       botItems,
       item =>
-        heroReg.test(getValueFromTag(item.tags).toLowerCase()) &&
+        heroReg.test(getValueFromTag(item.tags, 'Hero').toLowerCase()) &&
         rarityReg.test(item.rarity.toLowerCase()) &&
         nameReg.test(item.market_hash_name.toLowerCase()),
     );
