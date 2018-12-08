@@ -1,24 +1,35 @@
 import { takeEvery, takeLatest, call, put, select } from 'redux-saga/effects';
 import request from 'utils/request';
+import Config from 'utils/config';
 import {
-  steamAuthenticateSuccess,
-  steamAuthenticateFail,
+  getInventorySuccess,
   getBotItemsSuccess,
   getBotItemsFail,
   getProfileSuccess,
+  getInventoryFail,
+  getProfileFail,
 } from './actions';
 import { CALL_STEAM_AUTHENTICATE, GET_BOT_ITEMS } from './constants';
 
-export function* callSteamAuthenticateSaga() {
+export function* getUserInventorySaga() {
   const id = window.localStorage.getItem('tradewithme/user-id');
   try {
     if (!id) throw new Error('Steam Authentication require');
-    const res = yield call(request, `${process.env.GET_PLAYER_INVENTORY}${id}`);
-    const info = yield call(request, `${process.env.GET_PLAYER_PROFILE}${id}`);
-    yield put(steamAuthenticateSuccess(res));
+    const res = yield call(request, `${Config.api.getPlayerInventory}${id}`);
+    yield put(getInventorySuccess(res));
+  } catch (error) {
+    yield put(getInventoryFail());
+  }
+}
+
+export function* getUserProfileSaga() {
+  const id = window.localStorage.getItem('tradewithme/user-id');
+  try {
+    if (!id) throw new Error('Steam Authentication require');
+    const info = yield call(request, `${Config.api.getPlayerProfile}${id}`);
     yield put(getProfileSuccess(info));
   } catch (error) {
-    yield put(steamAuthenticateFail());
+    yield put(getProfileFail());
   }
 }
 
@@ -29,7 +40,7 @@ export function* getBotItemsSaga() {
     .get('bot')
     .get('id');
   try {
-    const url = new URL(process.env.GET_BOT_ITEMS);
+    const url = new URL(Config.api.getBotItems);
     url.searchParams.append('bot', botId);
     const res = yield call(request, url);
     yield put(getBotItemsSuccess(res));
@@ -39,6 +50,7 @@ export function* getBotItemsSaga() {
 }
 
 export default function* homeSaga() {
-  yield takeEvery(CALL_STEAM_AUTHENTICATE, callSteamAuthenticateSaga);
+  yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserInventorySaga);
+  yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserProfileSaga);
   yield takeLatest(GET_BOT_ITEMS, getBotItemsSaga);
 }

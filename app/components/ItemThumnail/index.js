@@ -11,28 +11,13 @@ import _ from 'lodash';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import uuid from 'uuid/v1';
+import { getValueFromTag } from 'utils/utils';
+import styles from './styles';
 
 const optionsCursorTrueWithMargin = {
   followCursor: true,
   shiftX: 20,
   shiftY: 0,
-};
-
-const style = () => ({
-  whiteText: {
-    color: 'white',
-  },
-  priceText: {
-    color: '#EEF1BD',
-  },
-  disableText: {
-    color: '#CD0F22',
-  },
-});
-
-const getValueFromTag = (tags, category) => {
-  const tag = _.find(tags, t => t.category === category);
-  return tag && tag.localized_tag_name ? tag.localized_tag_name : '';
 };
 
 const getHelpText = state =>
@@ -126,4 +111,4 @@ ItemThumnail.defaultProps = {
   validate: { valid: true },
 };
 
-export default withStyles(style)(ItemThumnail);
+export default withStyles(styles)(ItemThumnail);

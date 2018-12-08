@@ -8,8 +8,7 @@ import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   CALL_STEAM_AUTHENTICATE,
-  AUTHENTICATE_SUCCESS,
-  AUTHENTICATE_FAIL,
+  GET_INVENTORY_SUCCESS,
   GET_BOT_ITEMS,
   GET_BOT_ITEMS_SUCCESS,
   GET_BOT_ITEMS_FAIL,
@@ -19,6 +18,7 @@ import {
   REMOVE_PLAYER_ITEM,
   SELECT_BOT_ITEM,
   REMOVE_BOT_ITEM,
+  GET_INVENTORY_FAIL,
 } from './constants';
 
 export function defaultAction() {
@@ -31,9 +31,9 @@ export function callSteamAuthenticate() {
     type: CALL_STEAM_AUTHENTICATE,
   };
 }
-export function steamAuthenticateSuccess(data) {
+export function getInventorySuccess(data) {
   return {
-    type: AUTHENTICATE_SUCCESS,
+    type: GET_INVENTORY_SUCCESS,
     data: data.map(item => ({
       name: item.name,
       rarity: _.words(item.type)[0],
@@ -52,9 +52,14 @@ export function steamAuthenticateSuccess(data) {
     })),
   };
 }
-export function steamAuthenticateFail() {
+export function getProfileFail() {
   return {
-    type: AUTHENTICATE_FAIL,
+    type: GET_INVENTORY_FAIL,
+  };
+}
+export function getInventoryFail() {
+  return {
+    type: GET_INVENTORY_FAIL,
   };
 }
 export function getBotItems() {

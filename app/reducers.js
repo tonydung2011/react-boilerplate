@@ -7,7 +7,6 @@ import { connectRouter } from 'connected-react-router/immutable';
 
 import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
-import dotaItemsAllReducer from 'containers/DotaItemsAll/reducer';
 import homeReducer from 'containers/Home/reducer';
 
 /**
@@ -16,7 +15,6 @@ import homeReducer from 'containers/Home/reducer';
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
     language: languageProviderReducer,
-    dotaItemsAll: dotaItemsAllReducer,
     home: homeReducer,
     ...injectedReducers,
   });

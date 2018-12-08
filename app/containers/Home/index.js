@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// import { FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import Slider from 'rc-slider';
@@ -34,6 +34,7 @@ import ItemThumnail from 'components/ItemThumnail';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Config from 'utils/config';
+import { getValueFromTag } from 'utils/utils';
 import makeSelectHome, {
   selectBot,
   selectUser,
@@ -50,96 +51,11 @@ import {
   removeBotItem,
   removePlayerItem,
 } from './actions';
-// import messages from './messages';
+import messages from './messages';
+import styles from './styles';
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
-
-const styles = () => ({
-  input: {
-    color: 'white',
-  },
-  icon: {
-    marginTop: 'auto',
-    color: 'white',
-  },
-  tradeButton: {
-    backgroundColor: '#4582A2',
-    borderColor: '#4582A2',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#11BCC2',
-      borderColor: '#11BCC2',
-    },
-  },
-  textFieldInput: {
-    color: 'white',
-  },
-  textFieldLabel: {
-    color: 'white',
-    '&$formLabelFocused': {
-      color: 'white',
-    },
-  },
-  formLabelFocused: {
-    color: 'white',
-  },
-  textFieldBottomLine: {
-    borderBottom: '0.5px solid white',
-    '&:focus': {
-      borderBottom: '1px solid white',
-    },
-    '&:hover': {
-      borderBottom: '1px solid white',
-    },
-  },
-  selectControl: {
-    width: '80%',
-  },
-  iconSelect: {
-    color: 'white',
-  },
-  subTitle: {
-    color: 'white',
-  },
-  h6: {
-    color: 'white',
-  },
-  appBar: {
-    backgroundColor: '#171d21',
-  },
-  fullSpace: {
-    width: '100%',
-    height: '100%',
-  },
-  bigAvatar: {
-    width: 35,
-    height: 35,
-    border: '1px solid white',
-  },
-  steamNotloginText: {
-    textAlign: 'center',
-    color: 'white',
-  },
-  tradeWithMe: {
-    flexGrow: 1,
-  },
-  helperTextDefault: {
-    color: 'white',
-  },
-  helperTextError: {
-    color: 'green',
-  },
-  username: {
-    margin: 'auto 0',
-    color: 'white',
-  },
-});
-
-const getValueFromTag = (tags, category) => {
-  const tag = _.find(tags, t => t.category === category);
-  return tag && tag.localized_tag_name ? tag.localized_tag_name : '';
-};
 
 /* eslint-disable react/prefer-stateless-function */
 export class Home extends React.Component {
@@ -226,13 +142,17 @@ export class Home extends React.Component {
 
   componentWillMount = () => {
     this.props.getBotItems();
-    this.props.callSteamAuthenticate();
   };
 
   renderSelectedItemPLayer = classes =>
     this.props.trade.itemsOffer.length === 0 ? (
       <Typography className={classes.subTitle}>
-        SELECT THE ITEMS YOU WANT TO OFFER FROM THE INVENTORY BOX BELOW
+        <FormattedMessage
+          {...messages.selectedItems}
+          values={{
+            action: 'OFFER',
+          }}
+        />
       </Typography>
     ) : (
       <Grid container spacing={8}>
@@ -256,7 +176,12 @@ export class Home extends React.Component {
   renderSelectedItemBot = classes =>
     this.props.trade.itemsReceive.length === 0 ? (
       <Typography className={classes.subTitle}>
-        SELECT THE ITEMS YOU WANT TO RECIEVE FROM THE INVENTORY BOX BELOW
+        <FormattedMessage
+          {...messages.selectedItems}
+          values={{
+            action: 'RECEIVE',
+          }}
+        />
       </Typography>
     ) : (
       <Grid container spacing={8}>
@@ -296,7 +221,7 @@ export class Home extends React.Component {
     if (this.props.bot.loaded && this.props.bot.error) {
       return (
         <Typography variant="h6" className={classes.subTitle}>
-          Some Thing went wrong
+          <FormattedMessage {...messages.someThingWrong} />
         </Typography>
       );
     }
@@ -328,10 +253,10 @@ export class Home extends React.Component {
         >
           <Grid item>
             <Typography className={classes.steamNotloginText}>
-              YOU DID NOT LOGIN
+              <FormattedMessage {...messages.notLogin} />
             </Typography>
             <Typography className={classes.steamNotloginText}>
-              LOGIN VIA STEAM
+              <FormattedMessage {...messages.login} />
             </Typography>
             <a href={Config.steamOpenIdUrl}>
               <img
@@ -362,7 +287,7 @@ export class Home extends React.Component {
     if (this.props.player.loaded && this.props.player.error) {
       return (
         <Typography variant="h6" className={classes.subTitle}>
-          Some Thing went wrong
+          <FormattedMessage {...messages.someThingWrong} />
         </Typography>
       );
     }
@@ -551,9 +476,9 @@ export class Home extends React.Component {
                 color="inherit"
                 className={classes.tradeWithMe}
               >
-                TRADE WITH ME
+                <FormattedMessage {...messages.title} />
               </Typography>
-              {this.props.player.auth || this.props.player.loading ? (
+              {this.props.player.auth ? (
                 <div className="row-direction">
                   <Typography className={classes.username} variant="subheading">
                     {this.props.player.info.personaname}
@@ -579,7 +504,9 @@ export class Home extends React.Component {
                       open={this.state.showPlayerMenu}
                       onClose={this.toggleMenuPlayer}
                     >
-                      <MenuItem onClick={this.props.logout}>Log out</MenuItem>
+                      <MenuItem onClick={this.props.logout}>
+                        <FormattedMessage {...messages.logout} />
+                      </MenuItem>
                     </Menu>
                   </div>
                 </div>
@@ -606,7 +533,7 @@ export class Home extends React.Component {
                           variant="subtitle1"
                           className={`text-align-left ${classes.subTitle}`}
                         >
-                          You Offer
+                          <FormattedMessage {...messages.youOffer} />
                         </Typography>
                       </Grid>
                       <Grid item xs={6}>
@@ -725,7 +652,7 @@ export class Home extends React.Component {
                     className={classes.tradeButton}
                     fullWidth
                   >
-                    TRADE
+                    <FormattedMessage {...messages.toTrade} />
                   </Button>
                 </div>
                 <div className="toolbar-filter">
@@ -734,7 +661,7 @@ export class Home extends React.Component {
                       variant="subtitle1"
                       className={`text-align-center ${classes.subTitle}`}
                     >
-                      BOT FILTER
+                      <FormattedMessage {...messages.botFilter} />
                     </Typography>
                   </div>
                   <div className="pad-10 select-area-body">
@@ -745,7 +672,7 @@ export class Home extends React.Component {
                           classes.subTitle
                         }`}
                       >
-                        PRICE
+                        <FormattedMessage {...messages.price} />
                       </Typography>
                       <Grid container spacing={8}>
                         <Grid item sm={6}>
@@ -932,7 +859,7 @@ export class Home extends React.Component {
                           variant="subtitle1"
                           className={`text-align-right ${classes.subTitle}`}
                         >
-                          You Receive
+                          <FormattedMessage {...messages.youReceive} />
                         </Typography>
                       </Grid>
                     </Grid>
@@ -1032,7 +959,7 @@ export class Home extends React.Component {
         </div>
         <AppBar position="static" className={`pad-10 ${classes.appBar}`}>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            TRADE WITH ME
+            <FormattedMessage {...messages.title} />
           </Typography>
         </AppBar>
       </div>

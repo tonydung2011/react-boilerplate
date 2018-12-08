@@ -6,7 +6,8 @@ import {
   select,
   cancelled,
 } from 'redux-saga/effects';
-import request from '../../utils/request';
+import Config from 'utils/config';
+import request from 'utils/request';
 import {
   GET_ALL_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS,
@@ -45,7 +46,7 @@ export function* getDotaItemsOnStateSaga(action) {
     const sort = state.get('dotaItemsAll').get('sort');
     const minPrice = state.get('dotaItemsAll').get('minPrice');
     const maxPrice = state.get('dotaItemsAll').get('maxPrice');
-    const url = new URL(process.env.GET_ALL_DOTA_ITEMS_ENDPOINT);
+    const url = new URL(Config.api.getAllDotaItems);
     url.searchParams.append('limit', limit);
     url.searchParams.append('page', page);
     url.searchParams.append('rarity', rarity);
@@ -84,7 +85,7 @@ export function* reloadDotaItemsToDefaultSaga(action) {
 
 export function* updateDotaItemsSaga(action) {
   try {
-    yield call(request, process.env.UPDATE_DOTA_ITEMS_ENDPOINT, {
+    yield call(request, Config.api.updateItems, {
       body: JSON.stringify({
         data: action.data,
       }),

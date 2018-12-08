@@ -8,8 +8,8 @@ import { fromJS } from 'immutable';
 import _ from 'lodash';
 import {
   DEFAULT_ACTION,
-  AUTHENTICATE_SUCCESS,
-  AUTHENTICATE_FAIL,
+  GET_INVENTORY_SUCCESS,
+  GET_INVENTORY_FAIL,
   GET_BOT_ITEMS_SUCCESS,
   GET_BOT_ITEMS_FAIL,
   GET_BOT_ITEMS,
@@ -20,6 +20,7 @@ import {
   REMOVE_BOT_ITEM,
   SELECT_PLAYER_ITEM,
   SELECT_BOT_ITEM,
+  GET_PROFILE_FAIL,
 } from './constants';
 
 export const initialState = fromJS({
@@ -53,10 +54,10 @@ function homeReducer(state = initialState, action) {
     case CALL_STEAM_AUTHENTICATE:
       return state
         .setIn(['user', 'loading'], true)
+        .setIn(['user', 'auth'], false)
         .setIn(['user', 'loaded'], false);
-    case AUTHENTICATE_SUCCESS:
+    case GET_INVENTORY_SUCCESS:
       return state
-        .setIn(['user', 'auth'], true)
         .setIn(['user', 'loading'], false)
         .setIn(['user', 'loaded'], true)
         .setIn(['user', 'error'], false)
@@ -65,15 +66,15 @@ function homeReducer(state = initialState, action) {
       return state
         .setIn(['user', 'auth'], true)
         .setIn(['user', 'loading'], false)
-        .setIn(['user', 'loaded'], true)
         .setIn(['user', 'error'], false)
         .setIn(['user', 'info'], fromJS(action.data));
-    case AUTHENTICATE_FAIL:
+    case GET_INVENTORY_FAIL:
       return state
-        .setIn(['user', 'auth'], false)
         .setIn(['user', 'loading'], false)
         .setIn(['user', 'loaded'], true)
         .setIn(['user', 'error'], true);
+    case GET_PROFILE_FAIL:
+      return state.setIn(['user', 'auth'], false);
     case GET_BOT_ITEMS:
       return state
         .setIn(['bot', 'loading'], true)

@@ -5,10 +5,7 @@ export const locationMiddleware = store => next => action => {
   if (action.type === LOCATION_CHANGE) {
     const homeState = store.getState().get('home');
     if (homeState && !homeState.getIn(['user', 'auth'])) {
-      const userId = window.localStorage.getItem('tradewithme/user-id');
-      if (userId) {
-        store.dispatch(callSteamAuthenticate(userId));
-      }
+      store.dispatch(callSteamAuthenticate());
     }
     if (
       action.payload &&
