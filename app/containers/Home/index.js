@@ -464,6 +464,18 @@ export class Home extends React.Component {
     return playerItems;
   };
 
+  verifyOffer = () => {
+    if (
+      !_.isEmpty(this.props.trade.itemsOffer) &&
+      !_.isEmpty(this.props.trade.itemsReceive) &&
+      _.sumBy(this.props.trade.itemsOffer, i => i.price) >=
+        _.sumBy(this.props.trade.itemsReceive, i => i.price)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -655,6 +667,7 @@ export class Home extends React.Component {
                     color="primary"
                     className={classes.tradeButton}
                     fullWidth
+                    disabled={!this.verifyOffer()}
                     onClick={() => {
                       this.props.createNewOffer();
                     }}
