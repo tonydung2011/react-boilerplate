@@ -77,4 +77,40 @@ export default () => ({
     margin: 'auto 0',
     color: 'white',
   },
+  modal: {
+    marginTop: '7rem',
+    marginLeft: '15rem',
+    marginRight: '15rem',
+    paddingTop: '1rem',
+    paddingBottom: '1rem',
+    paddingLeft: '3rem',
+    paddingRight: '3rem',
+    backgroundColor: '#04183F',
+    opacity: '0.7',
+  },
+  capitalized: {
+    textTransform: 'capitalize',
+  },
+  urlButton: {
+    textDecoration: 'none',
+  },
+  getUrlButton: {
+    color: 'white',
+    backgroundColor: '#BCB4AC',
+    borderColor: '#BCB4AC',
+    '&:hover': {
+      backgroundColor: '#DCDCDC',
+      borderColor: '#DCDCDC',
+    },
+  },
+  singleButtonClose: {
+    margin: 'auto',
+    color: 'white',
+    backgroundColor: '#BCB4AC',
+    borderColor: '#BCB4AC',
+    '&:hover': {
+      backgroundColor: '#DCDCDC',
+      borderColor: '#DCDCDC',
+    },
+  },
 });

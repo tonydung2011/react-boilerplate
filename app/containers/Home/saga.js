@@ -8,8 +8,17 @@ import {
   getProfileSuccess,
   getInventoryFail,
   getProfileFail,
+  toggleTradeUrlInputModal,
+  createNewOfferSuccess,
+  createNewOfferFail,
+  tradeUrlVerified,
+  tradeUrlUnVerified,
 } from './actions';
-import { CALL_STEAM_AUTHENTICATE, GET_BOT_ITEMS } from './constants';
+import {
+  CALL_STEAM_AUTHENTICATE,
+  GET_BOT_ITEMS,
+  CREATE_NEW_OFFER,
+} from './constants';
 
 export function* getUserInventorySaga() {
   const id = window.localStorage.getItem('tradewithme/user-id');
@@ -49,8 +58,45 @@ export function* getBotItemsSaga() {
   }
 }
 
+export function* createNewOfferSaga() {
+  const state = yield select();
+  if (state.getIn(['home', 'trade', 'urlTrade'])) {
+    try {
+      const url = new URL(Config.api.createNewOffer);
+      const res = yield call(request, url, {
+        method: 'POST',
+        body: JSON.stringify({
+          tradeUrl: state.getIn(['home', 'trade', 'urlTrade']),
+          playerItems: state
+            .getIn(['home', 'trade', 'itemsOffer'])
+            .map(item => ({
+              assetid: item.assetid,
+            }))
+            .toJS(),
+          botItems: state
+            .getIn(['home', 'trade', 'itemsReceive'])
+            .map(item => ({
+              assetid: item.assetid,
+            }))
+            .toJS(),
+        }),
+      });
+      yield put(createNewOfferSuccess(res));
+      yield put(tradeUrlVerified());
+    } catch (error) {
+      yield put(createNewOfferFail());
+      if (error.message === 'invalid trade url') {
+        yield put(tradeUrlUnVerified());
+      }
+    }
+  } else {
+    yield put(toggleTradeUrlInputModal());
+  }
+}
+
 export default function* homeSaga() {
   yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserInventorySaga);
   yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserProfileSaga);
+  yield takeLatest(CREATE_NEW_OFFER, createNewOfferSaga);
   yield takeLatest(GET_BOT_ITEMS, getBotItemsSaga);
 }

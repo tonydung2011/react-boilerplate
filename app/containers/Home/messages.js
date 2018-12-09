@@ -102,4 +102,36 @@ export default defineMessages({
     id: `${scope}.logout`,
     defaultMessage: 'Log out',
   },
+  submit: {
+    id: `${scope}.submit`,
+    defaultMessage: 'submit',
+  },
+  tradeUrl: {
+    id: `${scope}.tradeUrl`,
+    defaultMessage: 'Trade Url',
+  },
+  tradeUrlModalTitle: {
+    id: `${scope}.tradeUrlModalTitle`,
+    defaultMessage: 'SUBMIT YOUR TRADE URL',
+  },
+  getTradeUrl: {
+    id: `${scope}.getTradeUrl`,
+    defaultMessage: 'GET MY TRADE URL',
+  },
+  createOfferFail: {
+    id: `${scope}.createOfferFail`,
+    defaultMessage: 'CANNOT CREATE THIS OFFER',
+  },
+  createOfferSuccess: {
+    id: `${scope}.createOfferSuccess`,
+    defaultMessage: 'OFFER CREATED SUCCESSFULLY',
+  },
+  showMyOffer: {
+    id: `${scope}.showMyOffer`,
+    defaultMessage: 'Show Offer',
+  },
+  close: {
+    id: `${scope}.close`,
+    defaultMessage: 'Close',
+  },
 });

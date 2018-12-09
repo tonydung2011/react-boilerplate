@@ -1,5 +1,9 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { callSteamAuthenticate } from 'containers/Home/actions';
+import {
+  callSteamAuthenticate,
+  tradeUrlVerified,
+  updateTradeUrl,
+} from 'containers/Home/actions';
 
 export const locationMiddleware = store => next => action => {
   if (action.type === LOCATION_CHANGE) {
@@ -20,6 +24,11 @@ export const locationMiddleware = store => next => action => {
         'tradewithme/user-id',
         userId.substr(userId.search(regex) + 1),
       );
+    }
+    const tradeUrl = window.localStorage.getItem('tradewithme/trade-url');
+    if (tradeUrl) {
+      store.dispatch(tradeUrlVerified());
+      store.dispatch(updateTradeUrl(tradeUrl));
     }
   }
   return next(action);

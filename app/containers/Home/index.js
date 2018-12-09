@@ -25,23 +25,18 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
+import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { withStyles } from '@material-ui/core/styles';
 
 import ItemThumnail from 'components/ItemThumnail';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Config from 'utils/config';
 import { getValueFromTag } from 'utils/utils';
-import makeSelectHome, {
-  selectBot,
-  selectUser,
-  selectTrade,
-} from './selectors';
+import { selectBot, selectUser, selectTrade } from './selectors';
 import reducer from './reducer';
-import saga from './saga';
 import {
   getBotItems,
   callSteamAuthenticate,
@@ -50,6 +45,10 @@ import {
   selectBotItem,
   removeBotItem,
   removePlayerItem,
+  updateTradeUrl,
+  toggleTradeUrlInputModal,
+  toggleResultModal,
+  createNewOffer,
 } from './actions';
 import messages from './messages';
 import styles from './styles';
@@ -357,6 +356,10 @@ export class Home extends React.Component {
     });
   };
 
+  onChangeTradeUrl = e => {
+    this.props.updateTradeUrl(e.target.value);
+  };
+
   toggleMenuPlayer = event => {
     this.setState({
       showPlayerMenu: !this.state.showPlayerMenu,
@@ -380,7 +383,8 @@ export class Home extends React.Component {
         return arg[0] === 'min'
           ? 'Custom your minium price'
           : 'Custom your maxium price';
-
+      case 'trade-url':
+        return 'As Steam policy, we need your trade url to be able to send you this offer. You only need to provide it once since your first trade success';
       default:
         return '';
     }
@@ -651,6 +655,9 @@ export class Home extends React.Component {
                     color="primary"
                     className={classes.tradeButton}
                     fullWidth
+                    onClick={() => {
+                      this.props.createNewOffer();
+                    }}
                   >
                     <FormattedMessage {...messages.toTrade} />
                   </Button>
@@ -962,6 +969,152 @@ export class Home extends React.Component {
             <FormattedMessage {...messages.title} />
           </Typography>
         </AppBar>
+        <Modal
+          open={this.props.trade.showTradeUrlInputModal}
+          onClose={this.props.toggleTradeUrlInputModal}
+        >
+          <Grid className={classes.modal}>
+            <Grid>
+              <Typography variant="h6" className={classes.h6}>
+                <FormattedMessage {...messages.tradeUrlModalTitle} />
+              </Typography>
+              <TextField
+                fullWidth
+                className={classes.input}
+                id="player-trade-url-input"
+                label={<FormattedMessage {...messages.tradeUrl} />}
+                value={this.props.trade.urlTrade}
+                onChange={this.onChangeTradeUrl}
+                placeholder="Something like 'https://steamcommunity.com/tradeoffer/new/?partner=000001&token=any_toke'"
+                margin="dense"
+                helperText={this.getHelperText('trade-url')}
+                InputProps={{
+                  className: classes.textFieldInput,
+                  classes: {
+                    underline: classes.textFieldBottomLine,
+                  },
+                }}
+                InputLabelProps={{
+                  FormLabelClasses: {
+                    root: classes.textFieldLabel,
+                    focused: classes.formLabelFocused,
+                  },
+                  shrink: true,
+                }}
+                FormHelperTextProps={{
+                  classes: {
+                    root: classes.helperTextDefault,
+                    error: classes.helperTextError,
+                  },
+                }}
+              />
+              <br />
+              <br />
+              <Grid container spacing={16}>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.tradeButton}
+                    onClick={() => {
+                      this.props.createNewOffer();
+                      this.toggleTradeUrlInputModal();
+                    }}
+                  >
+                    <FormattedMessage {...messages.submit} />
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.getUrlButton}
+                  >
+                    <a
+                      href={`${
+                        this.props.player.info.profileurl
+                      }/tradeoffers/privacy`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={classes.urlButton}
+                    >
+                      <FormattedMessage {...messages.getTradeUrl} />
+                    </a>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Modal>
+        <Modal open={this.props.trade.loading}>
+          <Spinner className="center" name="folding-cube" color="white" />
+        </Modal>
+        <Modal open={this.props.trade.showResultModal}>
+          <div className={classes.modal}>
+            {this.props.trade.error && (
+              <Grid container justify="center">
+                <Grid item>
+                  <Typography variant="h6" className={classes.h6}>
+                    <FormattedMessage {...messages.createOfferFail} />
+                  </Typography>
+                  <br />
+                  <Grid container justify="center">
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        className={classes.getUrlButton}
+                        onClick={this.props.toggleResultModal}
+                      >
+                        <FormattedMessage {...messages.close} />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            )}
+            {!this.props.trade.error && (
+              <Grid container justify="center">
+                <Grid item>
+                  <Typography variant="h6" className={classes.h6}>
+                    <FormattedMessage {...messages.createOfferSuccess} />
+                  </Typography>
+                  <br />
+                  <Grid container spacing={16} justify="center">
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        className={classes.getUrlButton}
+                      >
+                        <a
+                          href={`${
+                            this.props.player.info.profileurl
+                          }/tradeoffers?history=1`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={classes.urlButton}
+                        >
+                          <FormattedMessage {...messages.showMyOffer} />
+                        </a>
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="danger"
+                        className={classes.getUrlButton}
+                        onClick={this.props.toggleResultModal}
+                      >
+                        <FormattedMessage {...messages.close} />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            )}
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -979,10 +1132,13 @@ Home.propTypes = {
   selectBotItem: PropTypes.func.isRequired,
   removeBotItem: PropTypes.func.isRequired,
   removePlayerItem: PropTypes.func.isRequired,
+  updateTradeUrl: PropTypes.func.isRequired,
+  toggleTradeUrlInputModal: PropTypes.func.isRequired,
+  toggleResultModal: PropTypes.func.isRequired,
+  createNewOffer: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  home: makeSelectHome(),
   bot: selectBot(),
   player: selectUser(),
   trade: selectTrade(),
@@ -993,10 +1149,14 @@ function mapDispatchToProps(dispatch) {
     getBotItems: () => dispatch(getBotItems()),
     callSteamAuthenticate: () => dispatch(callSteamAuthenticate()),
     logout: () => dispatch(logout()),
+    toggleTradeUrlInputModal: () => dispatch(toggleTradeUrlInputModal()),
+    toggleResultModal: () => dispatch(toggleResultModal()),
+    createNewOffer: () => dispatch(createNewOffer()),
     selectPlayerItem: item => dispatch(selectPlayerItem(item)),
     selectBotItem: item => dispatch(selectBotItem(item)),
     removeBotItem: item => dispatch(removeBotItem(item)),
     removePlayerItem: item => dispatch(removePlayerItem(item)),
+    updateTradeUrl: url => dispatch(updateTradeUrl(url)),
   };
 }
 
@@ -1006,11 +1166,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'home', reducer });
-const withSaga = injectSaga({ key: 'home', saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
   withStyles(styles),
 )(Home);

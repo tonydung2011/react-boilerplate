@@ -80,3 +80,8 @@
     flex-direction: row;
     display: flex;
 }
+
+.center {
+    top: 50vh;
+    margin: auto;
+}

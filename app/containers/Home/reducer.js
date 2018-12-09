@@ -21,6 +21,13 @@ import {
   SELECT_PLAYER_ITEM,
   SELECT_BOT_ITEM,
   GET_PROFILE_FAIL,
+  UPDATE_TRADE_URL,
+  TRADE_URL_VERIFIED,
+  TOGGLE_TRADE_URL_INPUT_MODAL,
+  CREATE_NEW_OFFER_SUCCESS,
+  CREATE_NEW_OFFER_FAIL,
+  TOGGLE_RESULT_MODAL,
+  TRADE_URL_UNVERIFIED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -44,6 +51,12 @@ export const initialState = fromJS({
     urlTrade: '',
     itemsOffer: [],
     itemsReceive: [],
+    urlVerified: false,
+    showTradeUrlInputModal: false,
+    loading: false,
+    error: false,
+    done: false,
+    showResultModal: false,
   },
 });
 
@@ -143,6 +156,43 @@ function homeReducer(state = initialState, action) {
           ),
         ),
       );
+    case UPDATE_TRADE_URL:
+      return state
+        .setIn(['trade', 'urlTrade'], action.url)
+        .setIn(['trade', 'urlVerified'], false);
+    case TRADE_URL_VERIFIED:
+      window.localStorage.setItem(
+        'tradewithme/trade-url',
+        state.getIn('trade', 'urlTrade'),
+      );
+      return state.setIn(['trade', 'urlVerified'], true);
+    case TRADE_URL_UNVERIFIED:
+      window.localStorage.removeItem('tradewithme/trade-url');
+      return state
+        .setIn(['trade', 'urlVerified'], false)
+        .setIn(['trade', 'urlTrade'], '');
+    case TOGGLE_RESULT_MODAL:
+      return state.setIn(
+        ['trade', 'showResultModal'],
+        !state.getIn(['trade', 'showResultModal']),
+      );
+    case TOGGLE_TRADE_URL_INPUT_MODAL:
+      return state.setIn(
+        ['trade', 'showTradeUrlInputModal'],
+        !state.getIn(['trade', 'showTradeUrlInputModal']),
+      );
+    case CREATE_NEW_OFFER_SUCCESS:
+      return state
+        .setIn(['trade', 'showResultModal'], true)
+        .setIn(['trade', 'done'], true)
+        .setIn(['trade', 'loading'], false)
+        .setIn(['trade', 'error'], false);
+    case CREATE_NEW_OFFER_FAIL:
+      return state
+        .setIn(['trade', 'showResultModal'], true)
+        .setIn(['trade', 'done'], true)
+        .setIn(['trade', 'loading'], false)
+        .setIn(['trade', 'error'], true);
     default:
       return state;
   }

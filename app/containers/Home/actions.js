@@ -19,6 +19,14 @@ import {
   SELECT_BOT_ITEM,
   REMOVE_BOT_ITEM,
   GET_INVENTORY_FAIL,
+  UPDATE_TRADE_URL,
+  CREATE_NEW_OFFER,
+  TRADE_URL_VERIFIED,
+  TOGGLE_TRADE_URL_INPUT_MODAL,
+  CREATE_NEW_OFFER_FAIL,
+  CREATE_NEW_OFFER_SUCCESS,
+  TOGGLE_RESULT_MODAL,
+  TRADE_URL_UNVERIFIED,
 } from './constants';
 
 export function defaultAction() {
@@ -126,5 +134,49 @@ export function removeBotItem(item) {
   return {
     type: REMOVE_BOT_ITEM,
     item,
+  };
+}
+export function updateTradeUrl(url) {
+  return {
+    type: UPDATE_TRADE_URL,
+    url,
+  };
+}
+
+export function createNewOffer() {
+  return {
+    type: CREATE_NEW_OFFER,
+  };
+}
+export function createNewOfferSuccess(payload) {
+  return {
+    type: CREATE_NEW_OFFER_SUCCESS,
+    payload,
+  };
+}
+export function createNewOfferFail() {
+  return {
+    type: CREATE_NEW_OFFER_FAIL,
+  };
+}
+
+export function tradeUrlVerified() {
+  return {
+    type: TRADE_URL_VERIFIED,
+  };
+}
+export function tradeUrlUnVerified() {
+  return {
+    type: TRADE_URL_UNVERIFIED,
+  };
+}
+export function toggleTradeUrlInputModal() {
+  return {
+    type: TOGGLE_TRADE_URL_INPUT_MODAL,
+  };
+}
+export function toggleResultModal() {
+  return {
+    type: TOGGLE_RESULT_MODAL,
   };
 }

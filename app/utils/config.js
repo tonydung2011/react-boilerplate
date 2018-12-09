@@ -4,9 +4,10 @@ export default {
   }/auth-return-url&openid.realm=${window.location.origin}`,
   api: {
     getAllDotaItems: process.env.GET_ALL_DOTA_ITEMS_ENDPOINT,
-    getPlayerInventory: process.env.GET_PLAYER_INVENTORY,
-    getPlayerProfile: process.env.GET_PLAYER_PROFILE,
+    getPlayerInventory: process.env.GET_PLAYER_INVENTORY_ENDPOINT,
+    getPlayerProfile: process.env.GET_PLAYER_PROFILE_ENDPOINT,
     updateItems: process.env.UPDATE_DOTA_ITEMS_ENDPOINT,
-    getBotItems: process.env.GET_BOT_ITEMS,
+    getBotItems: process.env.GET_BOT_ITEMS_ENDPOINT,
+    createNewOffer: process.env.CREATE_OFFER_ENDPOINT,
   },
 };
