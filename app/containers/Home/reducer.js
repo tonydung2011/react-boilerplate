@@ -78,8 +78,6 @@ function homeReducer(state = initialState, action) {
     case GET_PROFILE_SUCCESS:
       return state
         .setIn(['user', 'auth'], true)
-        .setIn(['user', 'loading'], false)
-        .setIn(['user', 'error'], false)
         .setIn(['user', 'info'], fromJS(action.data));
     case GET_INVENTORY_FAIL:
       return state
