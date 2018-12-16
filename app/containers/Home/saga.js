@@ -69,17 +69,20 @@ export function* createNewOfferSaga() {
           tradeUrl: state.getIn(['home', 'trade', 'urlTrade']),
           playerItems: state
             .getIn(['home', 'trade', 'itemsOffer'])
+            .toJS()
             .map(item => ({
               assetid: item.assetid,
-            }))
-            .toJS(),
+            })),
           botItems: state
             .getIn(['home', 'trade', 'itemsReceive'])
+            .toJS()
             .map(item => ({
               assetid: item.assetid,
-            }))
-            .toJS(),
+            })),
         }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       yield put(createNewOfferSuccess(res));
       yield put(tradeUrlVerified());
