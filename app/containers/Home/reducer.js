@@ -28,6 +28,8 @@ import {
   CREATE_NEW_OFFER_FAIL,
   TOGGLE_RESULT_MODAL,
   TRADE_URL_UNVERIFIED,
+  CLEAR_BOT_SELECTED_ITEMS,
+  CLEAR_PLAYER_SELECTED_ITEMS,
 } from './constants';
 
 export const initialState = fromJS({
@@ -191,6 +193,10 @@ function homeReducer(state = initialState, action) {
         .setIn(['trade', 'done'], true)
         .setIn(['trade', 'loading'], false)
         .setIn(['trade', 'error'], true);
+    case CLEAR_BOT_SELECTED_ITEMS:
+      return state.setIn(['trade', 'itemsReceive'], fromJS([]));
+    case CLEAR_PLAYER_SELECTED_ITEMS:
+      return state.setIn(['trade', 'itemsOffer'], fromJS([]));
     default:
       return state;
   }

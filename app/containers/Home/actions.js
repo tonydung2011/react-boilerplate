@@ -27,6 +27,8 @@ import {
   CREATE_NEW_OFFER_SUCCESS,
   TOGGLE_RESULT_MODAL,
   TRADE_URL_UNVERIFIED,
+  CLEAR_PLAYER_SELECTED_ITEMS,
+  CLEAR_BOT_SELECTED_ITEMS,
 } from './constants';
 
 export function defaultAction() {
@@ -178,5 +180,15 @@ export function toggleTradeUrlInputModal() {
 export function toggleResultModal() {
   return {
     type: TOGGLE_RESULT_MODAL,
+  };
+}
+export function clearPlayerSelectedItems() {
+  return {
+    type: CLEAR_PLAYER_SELECTED_ITEMS,
+  };
+}
+export function clearBotSelectedItems() {
+  return {
+    type: CLEAR_BOT_SELECTED_ITEMS,
   };
 }

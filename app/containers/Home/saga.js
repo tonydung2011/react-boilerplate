@@ -13,6 +13,8 @@ import {
   createNewOfferFail,
   tradeUrlVerified,
   tradeUrlUnVerified,
+  clearBotSelectedItems,
+  clearPlayerSelectedItems,
 } from './actions';
 import {
   CALL_STEAM_AUTHENTICATE,
@@ -79,12 +81,16 @@ export function* createNewOfferSaga() {
             .map(item => ({
               assetid: item.assetid,
             })),
+          userName: state.getIn(['home', 'user', 'info', 'personaname']),
+          userId: state.getIn(['home', 'user', 'info', 'steamid']),
         }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
       yield put(createNewOfferSuccess(res));
+      yield put(clearBotSelectedItems());
+      yield put(clearPlayerSelectedItems());
       yield put(tradeUrlVerified());
     } catch (error) {
       yield put(createNewOfferFail());
