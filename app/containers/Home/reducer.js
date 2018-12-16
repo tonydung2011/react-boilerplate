@@ -30,6 +30,7 @@ import {
   TRADE_URL_UNVERIFIED,
   CLEAR_BOT_SELECTED_ITEMS,
   CLEAR_PLAYER_SELECTED_ITEMS,
+  CREATE_NEW_OFFER,
 } from './constants';
 
 export const initialState = fromJS({
@@ -181,6 +182,11 @@ function homeReducer(state = initialState, action) {
         ['trade', 'showTradeUrlInputModal'],
         !state.getIn(['trade', 'showTradeUrlInputModal']),
       );
+    case CREATE_NEW_OFFER:
+      return state
+        .setIn(['trade', 'loading'], true)
+        .setIn(['trade', 'done'], false)
+        .setIn(['trade', 'error'], false);
     case CREATE_NEW_OFFER_SUCCESS:
       return state
         .setIn(['trade', 'showResultModal'], true)

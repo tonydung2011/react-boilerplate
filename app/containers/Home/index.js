@@ -1031,7 +1031,7 @@ export class Home extends React.Component {
                     className={classes.tradeButton}
                     onClick={() => {
                       this.props.createNewOffer();
-                      this.toggleTradeUrlInputModal();
+                      this.props.toggleTradeUrlInputModal();
                     }}
                   >
                     <FormattedMessage {...messages.submit} />
