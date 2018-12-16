@@ -31,6 +31,7 @@ import {
   CLEAR_BOT_SELECTED_ITEMS,
   CLEAR_PLAYER_SELECTED_ITEMS,
   CREATE_NEW_OFFER,
+  TOOGLE_TRADE_LOADING,
 } from './constants';
 
 export const initialState = fromJS({
@@ -184,7 +185,6 @@ function homeReducer(state = initialState, action) {
       );
     case CREATE_NEW_OFFER:
       return state
-        .setIn(['trade', 'loading'], true)
         .setIn(['trade', 'done'], false)
         .setIn(['trade', 'error'], false);
     case CREATE_NEW_OFFER_SUCCESS:
@@ -203,6 +203,11 @@ function homeReducer(state = initialState, action) {
       return state.setIn(['trade', 'itemsReceive'], fromJS([]));
     case CLEAR_PLAYER_SELECTED_ITEMS:
       return state.setIn(['trade', 'itemsOffer'], fromJS([]));
+    case TOOGLE_TRADE_LOADING:
+      return state.setIn(
+        ['trade', 'loading'],
+        !state.getIn(['trade', 'loading']),
+      );
     default:
       return state;
   }

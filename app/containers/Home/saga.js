@@ -15,6 +15,7 @@ import {
   tradeUrlUnVerified,
   clearBotSelectedItems,
   clearPlayerSelectedItems,
+  toogleTradeLoading,
 } from './actions';
 import {
   CALL_STEAM_AUTHENTICATE,
@@ -65,6 +66,7 @@ export function* createNewOfferSaga() {
   if (state.getIn(['home', 'trade', 'urlTrade'])) {
     try {
       const url = new URL(Config.api.createNewOffer);
+      yield put(toogleTradeLoading());
       const res = yield call(request, url, {
         method: 'POST',
         body: JSON.stringify({

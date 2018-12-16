@@ -29,6 +29,7 @@ import {
   TRADE_URL_UNVERIFIED,
   CLEAR_PLAYER_SELECTED_ITEMS,
   CLEAR_BOT_SELECTED_ITEMS,
+  TOOGLE_TRADE_LOADING,
 } from './constants';
 
 export function defaultAction() {
@@ -190,5 +191,10 @@ export function clearPlayerSelectedItems() {
 export function clearBotSelectedItems() {
   return {
     type: CLEAR_BOT_SELECTED_ITEMS,
+  };
+}
+export function toogleTradeLoading() {
+  return {
+    type: TOOGLE_TRADE_LOADING,
   };
 }

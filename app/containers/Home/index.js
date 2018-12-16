@@ -1103,7 +1103,7 @@ export class Home extends React.Component {
                         <a
                           href={`${
                             this.props.player.info.profileurl
-                          }/tradeoffers?history=1`}
+                          }/tradeoffers/`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={classes.urlButton}
