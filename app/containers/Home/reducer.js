@@ -163,7 +163,7 @@ function homeReducer(state = initialState, action) {
     case TRADE_URL_VERIFIED:
       window.localStorage.setItem(
         'tradewithme/trade-url',
-        state.getIn('trade', 'urlTrade'),
+        state.getIn('trade', state.getIn(['trade', 'urlTrade'])),
       );
       return state.setIn(['trade', 'urlVerified'], true);
     case TRADE_URL_UNVERIFIED:
