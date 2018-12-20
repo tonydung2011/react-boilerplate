@@ -4,53 +4,50 @@
  *
  */
 
-import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Modal from '@material-ui/core/Modal';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import ItemThumnail from 'components/ItemThumnail';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
-import _ from 'lodash';
-
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
-import Menu from '@material-ui/core/Menu';
-import Modal from '@material-ui/core/Modal';
-import MenuItem from '@material-ui/core/MenuItem';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import { withStyles } from '@material-ui/core/styles';
-
-import ItemThumnail from 'components/ItemThumnail';
-
-import injectReducer from 'utils/injectReducer';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import Config from 'utils/config';
+import injectReducer from 'utils/injectReducer';
 import { getValueFromTag } from 'utils/utils';
-import { selectBot, selectUser, selectTrade } from './selectors';
-import reducer from './reducer';
 import {
-  getBotItems,
   callSteamAuthenticate,
+  createNewOffer,
+  getBotItems,
   logout,
-  selectPlayerItem,
-  selectBotItem,
   removeBotItem,
   removePlayerItem,
-  updateTradeUrl,
-  toggleTradeUrlInputModal,
+  selectBotItem,
+  selectPlayerItem,
   toggleResultModal,
-  createNewOffer,
+  toggleTradeUrlInputModal,
+  updateTradeUrl,
 } from './actions';
 import messages from './messages';
+import reducer from './reducer';
+import { selectBot, selectTrade, selectUser } from './selectors';
 import styles from './styles';
 
 const { createSliderWithTooltip } = Slider;
@@ -853,6 +850,59 @@ export class Home extends React.Component {
                         <option value="arcana">arcana</option>
                       </TextField>
                     </div>
+                  </div>
+                </div>
+                <div className="margin-y-10 pad-10 select-area-header marketrate-container">
+                  <div className="text-align-center margin-y-10">
+                    <Typography variant="title" className={classes.colorC9D5B5}>
+                      <FormattedMessage {...messages.marketRate} />
+                    </Typography>
+                  </div>
+                  <div className="text-align-center margin-y-10">
+                    <Typography
+                      variant="sub-title"
+                      className={classes.colorD7816A}
+                    >
+                      <FormattedMessage {...messages.marketRate85} />
+                    </Typography>
+                  </div>
+                  <div className="text-align-center margin-y-10">
+                    <Typography
+                      variant="sub-title"
+                      className={classes.color77BA99}
+                    >
+                      <FormattedMessage {...messages.marketRate90} />
+                    </Typography>
+                  </div>
+                  <div className="text-align-center margin-y-10">
+                    <Typography
+                      variant="sub-title"
+                      className={classes.color84ACCE}
+                    >
+                      <FormattedMessage {...messages.marketRate95} />
+                    </Typography>
+                  </div>
+                  <div className="text-align-center margin-y-10">
+                    <Typography
+                      variant="sub-title"
+                      className={classes.colorD33F49}
+                    >
+                      <FormattedMessage
+                        {...messages.marketRate100}
+                        className="color-C9D5B5"
+                      />
+                    </Typography>
+                  </div>
+                  <div className="text-align-center margin-y-10">
+                    <Typography
+                      variant="sub-title"
+                      className={classes.colorA5668B}
+                    >
+                      <FormattedMessage
+                        {...messages.marketRate105}
+                        className="color-C9D5B5"
+                      />
+                    </Typography>
                   </div>
                 </div>
               </Grid>

@@ -113,4 +113,22 @@ export default () => ({
       borderColor: '#DCDCDC',
     },
   },
+  colorC9D5B5: {
+    color: '#C9D5B5',
+  },
+  colorA5668B: {
+    color: '#A5668B',
+  },
+  color84ACCE: {
+    color: '#84ACCE',
+  },
+  colorD33F49: {
+    color: '#D33F49',
+  },
+  color77BA99: {
+    color: '#77BA99',
+  },
+  colorD7816A: {
+    color: '#D7816A',
+  },
 });

@@ -134,4 +134,28 @@ export default defineMessages({
     id: `${scope}.close`,
     defaultMessage: 'Close',
   },
+  marketRate: {
+    id: `${scope}.marketRate`,
+    defaultMessage: 'Market Rate',
+  },
+  marketRate85: {
+    id: `${scope}.marketRate85`,
+    defaultMessage: '80% - 85%',
+  },
+  marketRate90: {
+    id: `${scope}.marketRate90`,
+    defaultMessage: '85% - 90%',
+  },
+  marketRate95: {
+    id: `${scope}.marketRate95`,
+    defaultMessage: '90% - 95%',
+  },
+  marketRate100: {
+    id: `${scope}.marketRate100`,
+    defaultMessage: '95% - 100%',
+  },
+  marketRate105: {
+    id: `${scope}.marketRate105`,
+    defaultMessage: '100% - 105%',
+  },
 });

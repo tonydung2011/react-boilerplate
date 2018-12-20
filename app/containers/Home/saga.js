@@ -86,9 +86,6 @@ export function* createNewOfferSaga() {
           userName: state.getIn(['home', 'user', 'info', 'personaname']),
           userId: state.getIn(['home', 'user', 'info', 'steamid']),
         }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
       yield put(createNewOfferSuccess(res));
       yield put(clearBotSelectedItems());

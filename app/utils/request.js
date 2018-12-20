@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+import { merge } from 'lodash';
 
 /**
  * Parses the JSON returned by a network request
@@ -47,7 +48,14 @@ export default function request(
     },
   },
 ) {
-  return fetch(url, options)
+  const standardOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': window.location.origin,
+    },
+  };
+  const newOption = merge(standardOptions, options);
+  return fetch(url, newOption)
     .then(checkStatus)
     .then(parseJSON);
 }

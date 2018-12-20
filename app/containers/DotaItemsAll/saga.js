@@ -89,9 +89,6 @@ export function* updateDotaItemsSaga(action) {
       body: JSON.stringify({
         data: action.data,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
       method: 'POST',
     });
     yield put(updateDotaItemsSuccess());
