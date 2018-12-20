@@ -21,4 +21,20 @@ export default defineMessages({
     id: `${scope}.update`,
     defaultMessage: 'Update',
   },
+  authenticatedRequired: {
+    id: `${scope}.authenticatedRequired`,
+    defaultMessage: 'Protected Resource',
+  },
+  password: {
+    id: `${scope}.password`,
+    defaultMessage: 'Password',
+  },
+  submit: {
+    id: `${scope}.submit`,
+    defaultMessage: 'Submit',
+  },
+  clearSession: {
+    id: `${scope}.clearSession`,
+    defaultMessage: 'Clear Session',
+  },
 });

@@ -9,5 +9,6 @@ export default {
     updateItems: process.env.UPDATE_DOTA_ITEMS_ENDPOINT,
     getBotItems: process.env.GET_BOT_ITEMS_ENDPOINT,
     createNewOffer: process.env.CREATE_OFFER_ENDPOINT,
+    adminAuthenticate: process.env.ADMIN_AUTHENTICATE,
   },
 };
