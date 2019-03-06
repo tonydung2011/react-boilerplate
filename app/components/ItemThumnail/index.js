@@ -35,7 +35,7 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
               src={component.image}
               width="100%"
               height="auto"
-              alt={component.name}
+              alt={component.marketHashName}
               style={{
                 opacity: validate.valid ? 1 : 0.5,
                 backgroundColor: validate.valid ? undefined : '##747376',
@@ -43,7 +43,7 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
             />
           </div>
           <Typography className={classes.whiteText}>
-            {component.name}
+            {component.marketHashName}
           </Typography>
           {validate.valid ? (
             <Typography className={classes.priceText} variant="subheading">

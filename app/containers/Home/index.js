@@ -309,12 +309,23 @@ export class Home extends React.Component {
         state: 'Unavailable',
       };
     }
+    if (
+      (typeof item.marketMarketableRestriction === 'boolean' &&
+        item.marketMarketableRestriction) ||
+      (typeof item.marketMarketableRestriction === 'number' &&
+        item.marketMarketableRestriction > 0)
+    ) {
+      return {
+        valide: false,
+        state: 'Unavailable',
+      };
+    }
     if (item.overstock) {
       const itemCounts = _.countBy(
         this.props.trade.itemsOffer,
-        i => i.market_hash_name,
+        i => i.marketHashName,
       );
-      const numberItem = itemCounts[item.market_hash_name] || 0;
+      const numberItem = itemCounts[item.marketHashName] || 0;
       if (numberItem >= parseInt(item.overstock, 10)) {
         return {
           valid: false,
@@ -406,7 +417,7 @@ export class Home extends React.Component {
       item =>
         heroReg.test(getValueFromTag(item.tags, 'Hero').toLowerCase()) &&
         rarityReg.test(item.rarity.toLowerCase()) &&
-        nameReg.test(item.market_hash_name.toLowerCase()),
+        nameReg.test(item.marketHashName.toLowerCase()),
     );
 
     switch (this.state.botFilter.order) {
@@ -414,11 +425,11 @@ export class Home extends React.Component {
         botItems = _.sortBy(botItems, i => i.price);
         break;
       case 'name':
-        botItems = _.sortBy(botItems, i => i.market_hash_name.toLowerCase());
+        botItems = _.sortBy(botItems, i => i.marketHashName.toLowerCase());
         break;
       case 'hero':
         botItems = _.sortBy(botItems, i =>
-          getValueFromTag(i.tags).toLowerCase(),
+          getValueFromTag(i.tags, 'Hero').toLowerCase(),
         );
         break;
       case 'rarity':
@@ -435,7 +446,7 @@ export class Home extends React.Component {
     const nameReg = new RegExp(this.state.playerFilter.search, 'i');
 
     playerItems = _.filter(playerItems, item =>
-      nameReg.test(item.market_hash_name.toLowerCase()),
+      nameReg.test(item.marketHashName.toLowerCase()),
     );
 
     switch (this.state.playerFilter.order) {
@@ -444,12 +455,12 @@ export class Home extends React.Component {
         break;
       case 'name':
         playerItems = _.sortBy(playerItems, i =>
-          i.market_hash_name.toLowerCase(),
+          i.marketHashName.toLowerCase(),
         );
         break;
       case 'hero':
         playerItems = _.sortBy(playerItems, i =>
-          getValueFromTag(i.tags).toLowerCase(),
+          getValueFromTag(i.tags, 'Hero').toLowerCase(),
         );
         break;
       case 'rarity':
@@ -463,6 +474,7 @@ export class Home extends React.Component {
 
   verifyOffer = () => {
     if (
+      !this.props.trade.isPending &&
       !_.isEmpty(this.props.trade.itemsOffer) &&
       !_.isEmpty(this.props.trade.itemsReceive) &&
       _.sumBy(this.props.trade.itemsOffer, i => i.price) >=
@@ -520,6 +532,11 @@ export class Home extends React.Component {
                       <MenuItem onClick={this.props.logout}>
                         <FormattedMessage {...messages.logout} />
                       </MenuItem>
+                      {this.props.trade.isPending && (
+                        <MenuItem>
+                          <FormattedMessage {...messages.pendingOffer} />
+                        </MenuItem>
+                      )}
                     </Menu>
                   </div>
                 </div>
@@ -860,7 +877,7 @@ export class Home extends React.Component {
                   </div>
                   <div className="text-align-center margin-y-10">
                     <Typography
-                      variant="sub-title"
+                      variant="subtitle1"
                       className={classes.colorD7816A}
                     >
                       <FormattedMessage {...messages.marketRate85} />
@@ -868,7 +885,7 @@ export class Home extends React.Component {
                   </div>
                   <div className="text-align-center margin-y-10">
                     <Typography
-                      variant="sub-title"
+                      variant="subtitle1"
                       className={classes.color77BA99}
                     >
                       <FormattedMessage {...messages.marketRate90} />
@@ -876,7 +893,7 @@ export class Home extends React.Component {
                   </div>
                   <div className="text-align-center margin-y-10">
                     <Typography
-                      variant="sub-title"
+                      variant="subtitle1"
                       className={classes.color84ACCE}
                     >
                       <FormattedMessage {...messages.marketRate95} />
@@ -884,7 +901,7 @@ export class Home extends React.Component {
                   </div>
                   <div className="text-align-center margin-y-10">
                     <Typography
-                      variant="sub-title"
+                      variant="subtitle1"
                       className={classes.colorD33F49}
                     >
                       <FormattedMessage
@@ -895,7 +912,7 @@ export class Home extends React.Component {
                   </div>
                   <div className="text-align-center margin-y-10">
                     <Typography
-                      variant="sub-title"
+                      variant="subtitle1"
                       className={classes.colorA5668B}
                     >
                       <FormattedMessage

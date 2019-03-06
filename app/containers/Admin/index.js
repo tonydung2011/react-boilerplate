@@ -137,7 +137,7 @@ export class Admin extends React.Component {
   updateData = () => {
     const selectedItems = this.table.state.selection; /* eslint-disable-line */
     const updateData = selectedItems.map(item => ({
-      market_hash_name: item.market_hash_name,
+      marketHashName: item.marketHashName,
       tradable: this.state.tradable,
       marketRate: this.state.marketRate,
       overstock: this.state.overstock,
@@ -314,7 +314,6 @@ export class Admin extends React.Component {
                   margin="dense"
                   fullWidth
                 >
-                  <option value="">All</option>
                   <option value="price-24h">latest 24h price</option>
                   <option value="price-7d">latest 7d price</option>
                   <option value="price-30d">latest 30 days price</option>

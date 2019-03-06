@@ -24,7 +24,7 @@ import {
   UPDATE_TRADE_URL,
   TRADE_URL_VERIFIED,
   TOGGLE_TRADE_URL_INPUT_MODAL,
-  CREATE_NEW_OFFER_SUCCESS,
+  OFFER_ADD_TO_QUEUE_SUCCESS,
   CREATE_NEW_OFFER_FAIL,
   TOGGLE_RESULT_MODAL,
   TRADE_URL_UNVERIFIED,
@@ -32,6 +32,9 @@ import {
   CLEAR_PLAYER_SELECTED_ITEMS,
   CREATE_NEW_OFFER,
   TOOGLE_TRADE_LOADING,
+  CREATE_OFFER_SUCCESS,
+  GET_OFFER_STATUS,
+  NOT_GET_OFFER_STATUS,
 } from './constants';
 
 export const initialState = fromJS({
@@ -61,6 +64,8 @@ export const initialState = fromJS({
     error: false,
     done: false,
     showResultModal: false,
+    isPending: false,
+    isGettingStatus: false,
   },
 });
 
@@ -186,21 +191,32 @@ function homeReducer(state = initialState, action) {
     case CREATE_NEW_OFFER:
       return state
         .setIn(['trade', 'done'], false)
+        .setIn(['trade', 'isPending'], false)
         .setIn(['trade', 'error'], false);
-    case CREATE_NEW_OFFER_SUCCESS:
+    case OFFER_ADD_TO_QUEUE_SUCCESS:
+      return state
+        .setIn(['trade', 'isPending'], true)
+        .setIn(['trade', 'loading'], false);
+    case CREATE_OFFER_SUCCESS:
       return state
         .setIn(['trade', 'showResultModal'], true)
         .setIn(['trade', 'done'], true)
-        .setIn(['trade', 'loading'], false)
-        .setIn(['trade', 'error'], false);
+        .setIn(['trade', 'isGettingStatus'], false)
+        .setIn(['trade', 'isPending'], false);
     case CREATE_NEW_OFFER_FAIL:
       return state
         .setIn(['trade', 'showResultModal'], true)
         .setIn(['trade', 'done'], true)
+        .setIn(['trade', 'isGettingStatus'], false)
         .setIn(['trade', 'loading'], false)
+        .setIn(['trade', 'isPending'], false)
         .setIn(['trade', 'error'], true);
     case CLEAR_BOT_SELECTED_ITEMS:
       return state.setIn(['trade', 'itemsReceive'], fromJS([]));
+    case GET_OFFER_STATUS:
+      return state.setIn(['trade', 'isGettingStatus'], true);
+    case NOT_GET_OFFER_STATUS:
+      return state.setIn(['trade', 'isGettingStatus'], false);
     case CLEAR_PLAYER_SELECTED_ITEMS:
       return state.setIn(['trade', 'itemsOffer'], fromJS([]));
     case TOOGLE_TRADE_LOADING:

@@ -1,4 +1,5 @@
 import { takeEvery, takeLatest, call, put, select } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import request from 'utils/request';
 import Config from 'utils/config';
 import {
@@ -9,18 +10,22 @@ import {
   getInventoryFail,
   getProfileFail,
   toggleTradeUrlInputModal,
-  createNewOfferSuccess,
+  offerAddToQueueSuccess,
   createNewOfferFail,
   tradeUrlVerified,
   tradeUrlUnVerified,
   clearBotSelectedItems,
   clearPlayerSelectedItems,
   toogleTradeLoading,
+  getOfferStatus,
+  createNewOfferSuccess,
+  notGetOfferStatus,
 } from './actions';
 import {
   CALL_STEAM_AUTHENTICATE,
   GET_BOT_ITEMS,
   CREATE_NEW_OFFER,
+  GET_OFFER_STATUS,
 } from './constants';
 
 export function* getUserInventorySaga() {
@@ -87,7 +92,8 @@ export function* createNewOfferSaga() {
           userId: state.getIn(['home', 'user', 'info', 'steamid']),
         }),
       });
-      yield put(createNewOfferSuccess(res));
+      yield put(offerAddToQueueSuccess(res));
+      yield put(getOfferStatus());
       yield put(clearBotSelectedItems());
       yield put(clearPlayerSelectedItems());
       yield put(tradeUrlVerified());
@@ -102,9 +108,34 @@ export function* createNewOfferSaga() {
   }
 }
 
+export function* getOfferStatusSaga() {
+  const id = window.localStorage.getItem('tradewithme/user-id');
+  try {
+    if (!id) throw new Error('Steam Authentication require');
+    const res = yield call(request, `${Config.api.getOfferStatus}${id}`);
+    if (res.status === 'pending' || res.status === 'started') {
+      yield delay(5000);
+      yield put(getOfferStatus());
+    }
+    if (res.status === 'success') {
+      yield put(createNewOfferSuccess(res));
+    }
+    if (res.status === 'fail') {
+      yield put(createNewOfferFail());
+    }
+    if (res.status === 'empty') {
+      yield put(notGetOfferStatus());
+    }
+  } catch (error) {
+    yield delay(5000);
+    yield put(getOfferStatus());
+  }
+}
+
 export default function* homeSaga() {
   yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserInventorySaga);
   yield takeEvery(CALL_STEAM_AUTHENTICATE, getUserProfileSaga);
+  yield takeEvery(GET_OFFER_STATUS, getOfferStatusSaga);
   yield takeLatest(CREATE_NEW_OFFER, createNewOfferSaga);
   yield takeLatest(GET_BOT_ITEMS, getBotItemsSaga);
 }

@@ -120,7 +120,7 @@ export default defineMessages({
   },
   createOfferFail: {
     id: `${scope}.createOfferFail`,
-    defaultMessage: 'CANNOT CREATE THIS OFFER',
+    defaultMessage: 'CANNOT CREATE THE PREVIOUS OFFER',
   },
   createOfferSuccess: {
     id: `${scope}.createOfferSuccess`,
@@ -157,5 +157,9 @@ export default defineMessages({
   marketRate105: {
     id: `${scope}.marketRate105`,
     defaultMessage: '100% - 105%',
+  },
+  pendingOffer: {
+    id: `${scope}.pendingOffer`,
+    defaultMessage: 'You have a pending offer being processed, please wait',
   },
 });

@@ -4,7 +4,6 @@
  *
  */
 
-import _ from 'lodash';
 import {
   DEFAULT_ACTION,
   CALL_STEAM_AUTHENTICATE,
@@ -24,12 +23,15 @@ import {
   TRADE_URL_VERIFIED,
   TOGGLE_TRADE_URL_INPUT_MODAL,
   CREATE_NEW_OFFER_FAIL,
-  CREATE_NEW_OFFER_SUCCESS,
+  OFFER_ADD_TO_QUEUE_SUCCESS,
   TOGGLE_RESULT_MODAL,
   TRADE_URL_UNVERIFIED,
   CLEAR_PLAYER_SELECTED_ITEMS,
   CLEAR_BOT_SELECTED_ITEMS,
   TOOGLE_TRADE_LOADING,
+  GET_OFFER_STATUS,
+  CREATE_OFFER_SUCCESS,
+  NOT_GET_OFFER_STATUS,
 } from './constants';
 
 export function defaultAction() {
@@ -45,22 +47,7 @@ export function callSteamAuthenticate() {
 export function getInventorySuccess(data) {
   return {
     type: GET_INVENTORY_SUCCESS,
-    data: data.map(item => ({
-      name: item.name,
-      rarity: _.words(item.type)[0],
-      instanceid: item.instanceid,
-      classid: item.classid,
-      assetid: item.assetid,
-      image: item.icon_url,
-      market_hash_name: item.market_hash_name,
-      market_tradable_restriction: item.market_tradable_restriction,
-      market_marketable_restriction: item.market_marketable_restriction,
-      marketable: item.marketable,
-      tags: item.tags,
-      price: item.price,
-      tradable: item.tradable,
-      overstock: item.overstock,
-    })),
+    data,
   };
 }
 export function getProfileFail() {
@@ -81,21 +68,7 @@ export function getBotItems() {
 export function getBotItemsSuccess(data) {
   return {
     type: GET_BOT_ITEMS_SUCCESS,
-    data: data.map(item => ({
-      name: item.name,
-      rarity: _.words(item.type)[0],
-      instanceid: item.instanceid,
-      classid: item.classid,
-      assetid: item.assetid,
-      image: item.icon_url,
-      market_hash_name: item.market_hash_name,
-      market_tradable_restriction: item.market_tradable_restriction,
-      market_marketable_restriction: item.market_marketable_restriction,
-      marketable: item.marketable,
-      tags: item.tags,
-      price: item.price,
-      tradable: item.tradable,
-    })),
+    data,
   };
 }
 export function getBotItemsFail() {
@@ -151,9 +124,9 @@ export function createNewOffer() {
     type: CREATE_NEW_OFFER,
   };
 }
-export function createNewOfferSuccess(payload) {
+export function offerAddToQueueSuccess(payload) {
   return {
-    type: CREATE_NEW_OFFER_SUCCESS,
+    type: OFFER_ADD_TO_QUEUE_SUCCESS,
     payload,
   };
 }
@@ -196,5 +169,20 @@ export function clearBotSelectedItems() {
 export function toogleTradeLoading() {
   return {
     type: TOOGLE_TRADE_LOADING,
+  };
+}
+export function getOfferStatus() {
+  return {
+    type: GET_OFFER_STATUS,
+  };
+}
+export function notGetOfferStatus() {
+  return {
+    type: NOT_GET_OFFER_STATUS,
+  };
+}
+export function createNewOfferSuccess() {
+  return {
+    type: CREATE_OFFER_SUCCESS,
   };
 }

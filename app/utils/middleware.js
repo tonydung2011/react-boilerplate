@@ -3,6 +3,7 @@ import {
   callSteamAuthenticate,
   tradeUrlVerified,
   updateTradeUrl,
+  getOfferStatus,
 } from 'containers/Home/actions';
 
 export const locationMiddleware = store => next => action => {
@@ -10,6 +11,9 @@ export const locationMiddleware = store => next => action => {
     const homeState = store.getState().get('home');
     if (homeState && !homeState.getIn(['user', 'auth'])) {
       store.dispatch(callSteamAuthenticate());
+      if (!homeState.getIn(['trade', 'isGettingStatus'])) {
+        store.dispatch(getOfferStatus());
+      }
     }
     if (
       action.payload &&

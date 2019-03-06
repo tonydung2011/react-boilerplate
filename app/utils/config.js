@@ -10,5 +10,6 @@ export default {
     getBotItems: process.env.GET_BOT_ITEMS_ENDPOINT,
     createNewOffer: process.env.CREATE_OFFER_ENDPOINT,
     adminAuthenticate: process.env.ADMIN_AUTHENTICATE,
+    getOfferStatus: process.env.GET_OFFER_STATUS,
   },
 };

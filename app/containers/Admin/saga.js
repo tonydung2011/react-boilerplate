@@ -11,7 +11,6 @@ import request from 'utils/request';
 import {
   GET_ALL_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS,
-  UPDATE_DOTA_ITEMS_SUCCESS,
   RELOAD_DOTA_ITEMS,
   SUBMIT_PASSWORD,
 } from './constants';
@@ -54,8 +53,8 @@ export function* getDotaItemsOnStateSaga() {
     url.searchParams.append('rarity', rarity);
     url.searchParams.append('hero', hero);
     url.searchParams.append('sort', sort);
-    url.searchParams.append('min_price', minPrice);
-    url.searchParams.append('max_price', maxPrice);
+    url.searchParams.append('minPrice', minPrice);
+    url.searchParams.append('maxPrice', maxPrice);
     url.searchParams.append('market_hash_name', marketHashName);
     const data = yield call(request, url.href, { signal });
     yield put(loadAllDotaItemsSuccess(data));
@@ -71,28 +70,28 @@ export function* getDotaItemsOnStateSaga() {
 export function* reloadDotaItemsToDefaultSaga(action) {
   yield put.resolve(updatePage(1));
   yield put.resolve(updateLimit(10));
-  if (action && action.query.hero) {
-    yield put.resolve(updateHero(action.query.hero));
-  }
   if (action && action.query.page) {
     yield put.resolve(updatePage(action.query.page));
   }
   if (action && action.query.limit) {
     yield put.resolve(updateLimit(action.query.limit));
   }
-  if (action && action.query.rarity) {
+  if (action && typeof action.query.hero === 'string') {
+    yield put.resolve(updateHero(action.query.hero));
+  }
+  if (action && typeof action.query.rarity === 'string') {
     yield put.resolve(updateRarity(action.query.rarity));
   }
-  if (action && action.query.marketHashName) {
+  if (action && typeof action.query.marketHashName === 'string') {
     yield put.resolve(updateMarketHashName(action.query.marketHashName));
   }
   if (action && action.query.sort) {
     yield put.resolve(updateSort(action.query.sort));
   }
-  if (action && action.query.maxPrice) {
+  if (action && typeof action.query.maxPrice === 'string') {
     yield put.resolve(updateMaxPrice(action.query.maxPrice));
   }
-  if (action && action.query.minPrice) {
+  if (action && typeof action.query.minPrice === 'string') {
     yield put.resolve(updateMinPrice(action.query.minPrice));
   }
   yield put(getDotaItems());
@@ -104,9 +103,10 @@ export function* updateDotaItemsSaga(action) {
       body: JSON.stringify({
         data: action.data,
       }),
-      method: 'POST',
+      method: 'PUT',
     });
     yield put(updateDotaItemsSuccess());
+    yield put(getDotaItems());
   } catch (error) {
     yield put(updateDotaItemsFail(error));
   }
@@ -135,9 +135,6 @@ export function* adminAuthenticateSaga(action) {
 export default function* dotaItemsAllSaga() {
   yield takeEvery(UPDATE_DOTA_ITEMS, updateDotaItemsSaga);
   yield takeLatest(GET_ALL_DOTA_ITEMS, getDotaItemsOnStateSaga);
-  yield takeLatest(
-    [RELOAD_DOTA_ITEMS, UPDATE_DOTA_ITEMS_SUCCESS],
-    reloadDotaItemsToDefaultSaga,
-  );
+  yield takeLatest(RELOAD_DOTA_ITEMS, reloadDotaItemsToDefaultSaga);
   yield takeEvery(SUBMIT_PASSWORD, adminAuthenticateSaga);
 }

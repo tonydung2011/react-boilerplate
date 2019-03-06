@@ -33,13 +33,13 @@ class DataTable extends React.Component {
   toggleSelection = (key, shift, row) => {
     const keyIndex = _.findIndex(
       this.state.selection,
-      i => i.market_hash_name === key,
+      i => i.marketHashName === key,
     );
     if (keyIndex !== -1) {
       this.setState({
         selection: _.filter(
           this.state.selection,
-          i => i.market_hash_name !== key,
+          i => i.marketHashName !== key,
         ),
       });
     } else {
@@ -47,7 +47,7 @@ class DataTable extends React.Component {
         selection: [
           ...this.state.selection,
           {
-            market_hash_name: key,
+            marketHashName: key,
             tradable: row.tradable,
           },
         ],
@@ -63,7 +63,7 @@ class DataTable extends React.Component {
       const currentRecords = wrappedInstance.getResolvedState().sortedData;
       currentRecords.forEach(item => {
         selection.push({
-          market_hash_name: item._original.market_hash_name, /*eslint-disable-line*/
+          marketHashName: item._original.marketHashName, /*eslint-disable-line*/
           tradable: item.tradable,
         });
       });
@@ -72,7 +72,7 @@ class DataTable extends React.Component {
   };
 
   isSelected = key =>
-    _.findIndex(this.state.selection, i => i.market_hash_name === key) !== -1;
+    _.findIndex(this.state.selection, i => i.marketHashName === key) !== -1;
 
   render() {
     const { toggleSelection, toggleAll, isSelected } = this;
@@ -84,10 +84,10 @@ class DataTable extends React.Component {
       toggleSelection,
       toggleAll,
       selectType: 'checkbox',
-      keyField: 'market_hash_name',
+      keyField: 'marketHashName',
       getTrProps: (s, r) => {
         if (r) {
-          const selected = this.isSelected(r.original.market_hash_name);
+          const selected = this.isSelected(r.original.marketHashName);
           return {
             style: {
               backgroundColor: selected ? 'lightgreen' : 'inherit',
@@ -110,7 +110,7 @@ class DataTable extends React.Component {
         columns={[
           {
             Header: 'Market Hash Name',
-            accessor: 'market_hash_name',
+            accessor: 'marketHashName',
             sortable: false,
           },
           {
@@ -125,7 +125,7 @@ class DataTable extends React.Component {
           },
           {
             Header: 'Prices',
-            accessor: d => d.prices.safe_ts.last_7d * d.marketRate,
+            accessor: 'priceLast7d',
             id: 'prices-latest',
             sortable: false,
           },
