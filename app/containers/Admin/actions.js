@@ -21,9 +21,6 @@ import {
   UPDATE_MARKET_HASH_NAME,
   UPDATE_MIN_PRICE,
   UPDATE_MAX_PRICE,
-  SUBMIT_PASSWORD,
-  SUBMIT_PASSWORD_SUCCESS,
-  SUBMIT_PASSWORD_FAIL,
 } from './constants';
 
 export function defaultAction() {
@@ -120,25 +117,5 @@ export function updateDotaItemsFail(error) {
   return {
     type: UPDATE_DOTA_ITEMS_FAIL,
     error,
-  };
-}
-
-export function submitPassword(password) {
-  return {
-    type: SUBMIT_PASSWORD,
-    password,
-  };
-}
-
-export function submitPasswordSuccess() {
-  return {
-    type: SUBMIT_PASSWORD_SUCCESS,
-  };
-}
-
-export function submitPasswordFail() {
-  window.localStorage.removeItem('tradewithme/admin');
-  return {
-    type: SUBMIT_PASSWORD_FAIL,
   };
 }

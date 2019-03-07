@@ -20,6 +20,3 @@ export const UPDATE_HERO = 'app/Admin/UPDATE_HERO';
 export const UPDATE_MARKET_HASH_NAME = 'app/Admin/UPDATE_MARKET_HASH_NAME';
 export const UPDATE_MIN_PRICE = 'app/Admin/UPDATE_MIN_PRICE';
 export const UPDATE_MAX_PRICE = 'app/Admin/UPDATE_MAXPRICE';
-export const SUBMIT_PASSWORD = 'app/Admin/SUBMIT_PASSWORD';
-export const SUBMIT_PASSWORD_SUCCESS = 'app/Admin/SUBMIT_PASSWORD_SUCCESS';
-export const SUBMIT_PASSWORD_FAIL = 'app/Admin/SUBMIT_PASSWORD_FAIL';

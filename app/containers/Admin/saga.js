@@ -8,11 +8,12 @@ import {
 } from 'redux-saga/effects';
 import Config from 'utils/config';
 import request from 'utils/request';
+import { navigateToPage } from 'utils/utils';
+import { adminLoginFail } from 'containers/Login/actions';
 import {
   GET_ALL_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS,
   RELOAD_DOTA_ITEMS,
-  SUBMIT_PASSWORD,
 } from './constants';
 import {
   loadAllDotaItemsFail,
@@ -28,9 +29,6 @@ import {
   updateSort,
   updateMaxPrice,
   updateMinPrice,
-  submitPasswordFail,
-  submitPasswordSuccess,
-  reloadDotaItem,
 } from './actions';
 
 // Individual exports for testing
@@ -56,9 +54,20 @@ export function* getDotaItemsOnStateSaga() {
     url.searchParams.append('minPrice', minPrice);
     url.searchParams.append('maxPrice', maxPrice);
     url.searchParams.append('market_hash_name', marketHashName);
-    const data = yield call(request, url.href, { signal });
+    const data = yield call(request, url.href, {
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem(
+          'tradewithme/token',
+        )}`,
+      },
+      signal,
+    });
     yield put(loadAllDotaItemsSuccess(data));
   } catch (error) {
+    if (error.response.status === 401) {
+      yield put(navigateToPage('/login'));
+      yield put(adminLoginFail());
+    }
     yield put(loadAllDotaItemsFail(error));
   } finally {
     if (yield cancelled()) {
@@ -100,6 +109,11 @@ export function* reloadDotaItemsToDefaultSaga(action) {
 export function* updateDotaItemsSaga(action) {
   try {
     yield call(request, Config.api.updateItems, {
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem(
+          'tradewithme/token',
+        )}`,
+      },
       body: JSON.stringify({
         data: action.data,
       }),
@@ -108,27 +122,11 @@ export function* updateDotaItemsSaga(action) {
     yield put(updateDotaItemsSuccess());
     yield put(getDotaItems());
   } catch (error) {
-    yield put(updateDotaItemsFail(error));
-  }
-}
-
-export function* adminAuthenticateSaga(action) {
-  try {
-    const res = yield call(request, Config.api.adminAuthenticate, {
-      method: 'POST',
-      body: JSON.stringify({
-        password: action.password,
-      }),
-    });
-    if (res.success) {
-      window.localStorage.setItem('tradewithme/admin', action.password);
-      yield put(submitPasswordSuccess());
-      yield put(reloadDotaItem({}));
-    } else {
-      yield put(submitPasswordFail());
+    if (error.response.status === 401) {
+      yield put(navigateToPage('/login'));
+      yield put(adminLoginFail());
     }
-  } catch (err) {
-    yield put(submitPasswordFail());
+    yield put(updateDotaItemsFail(error));
   }
 }
 
@@ -136,5 +134,4 @@ export default function* dotaItemsAllSaga() {
   yield takeEvery(UPDATE_DOTA_ITEMS, updateDotaItemsSaga);
   yield takeLatest(GET_ALL_DOTA_ITEMS, getDotaItemsOnStateSaga);
   yield takeLatest(RELOAD_DOTA_ITEMS, reloadDotaItemsToDefaultSaga);
-  yield takeEvery(SUBMIT_PASSWORD, adminAuthenticateSaga);
 }

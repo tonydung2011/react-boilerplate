@@ -21,9 +21,6 @@ import {
   UPDATE_SORT,
   UPDATE_MAX_PRICE,
   UPDATE_MIN_PRICE,
-  SUBMIT_PASSWORD_SUCCESS,
-  SUBMIT_PASSWORD_FAIL,
-  SUBMIT_PASSWORD,
 } from './constants';
 
 export const initialState = fromJS({
@@ -43,7 +40,6 @@ export const initialState = fromJS({
   minPrice: '',
   maxPrice: '',
   sort: 'price',
-  authenticated: 'unauthorized',
 });
 
 function dotaItemsAllReducer(state = initialState, action) {
@@ -99,12 +95,6 @@ function dotaItemsAllReducer(state = initialState, action) {
       return state.set('maxPrice', action.maxPrice);
     case UPDATE_MIN_PRICE:
       return state.set('minPrice', action.minPrice);
-    case SUBMIT_PASSWORD:
-      return state.set('authenticated', 'loading');
-    case SUBMIT_PASSWORD_SUCCESS:
-      return state.set('authenticated', 'success');
-    case SUBMIT_PASSWORD_FAIL:
-      return state.set('authenticated', 'fail');
     default:
       return state;
   }
