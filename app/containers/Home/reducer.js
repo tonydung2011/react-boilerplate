@@ -35,6 +35,9 @@ import {
   CREATE_OFFER_SUCCESS,
   GET_OFFER_STATUS,
   NOT_GET_OFFER_STATUS,
+  UPDATE_OFFER_STATUS,
+  SHOW_SNACKBAR,
+  HIDE_SNACKBAR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -65,7 +68,13 @@ export const initialState = fromJS({
     done: false,
     showResultModal: false,
     isPending: false,
+    offerStatus: 'empty',
     isGettingStatus: false,
+    snackbar: {
+      isDisplay: false,
+      message: undefined,
+      color: undefined,
+    },
   },
 });
 
@@ -217,6 +226,8 @@ function homeReducer(state = initialState, action) {
       return state.setIn(['trade', 'isGettingStatus'], true);
     case NOT_GET_OFFER_STATUS:
       return state.setIn(['trade', 'isGettingStatus'], false);
+    case UPDATE_OFFER_STATUS:
+      return state.setIn(['trade', 'offerStatus'], action.status);
     case CLEAR_PLAYER_SELECTED_ITEMS:
       return state.setIn(['trade', 'itemsOffer'], fromJS([]));
     case TOOGLE_TRADE_LOADING:
@@ -224,6 +235,17 @@ function homeReducer(state = initialState, action) {
         ['trade', 'loading'],
         !state.getIn(['trade', 'loading']),
       );
+    case SHOW_SNACKBAR:
+      return state.setIn(
+        ['trade', 'snackbar'],
+        fromJS({
+          isDisplay: true,
+          message: action.payload.message,
+          color: action.payload.color,
+        }),
+      );
+    case HIDE_SNACKBAR:
+      return state.setIn(['trade', 'snackbar', 'isDisplay'], false);
     default:
       return state;
   }

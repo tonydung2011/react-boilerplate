@@ -34,3 +34,6 @@ export const TOOGLE_TRADE_LOADING = 'app/Home/TOOGLE_TRADE_LOADING';
 export const GET_OFFER_STATUS = 'app/Home/GET_OFFER_STATUS';
 export const NOT_GET_OFFER_STATUS = 'app/Home/NOT_GET_OFFER_STATUS';
 export const CREATE_OFFER_SUCCESS = 'app/Home/CREATE_OFFER_SUCCESS';
+export const UPDATE_OFFER_STATUS = 'app/Home/UPDATE_OFFER_STATUS';
+export const SHOW_SNACKBAR = 'app/Home/SHOW_SNACKBAR';
+export const HIDE_SNACKBAR = 'app/Home/HIDE_SNACKBAR';

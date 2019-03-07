@@ -162,4 +162,12 @@ export default defineMessages({
     id: `${scope}.pendingOffer`,
     defaultMessage: 'You have a pending offer being processed, please wait',
   },
+  lastOfferStatus: {
+    id: `${scope}.lastOfferStatus`,
+    defaultMessage: 'Your last offer status: ',
+  },
+  offerProcessing: {
+    id: `${scope}.offerProcessing`,
+    defaultMessage: 'Your offer is processing, please wait!',
+  },
 });

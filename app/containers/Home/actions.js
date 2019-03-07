@@ -32,6 +32,9 @@ import {
   GET_OFFER_STATUS,
   CREATE_OFFER_SUCCESS,
   NOT_GET_OFFER_STATUS,
+  UPDATE_OFFER_STATUS,
+  SHOW_SNACKBAR,
+  HIDE_SNACKBAR,
 } from './constants';
 
 export function defaultAction() {
@@ -184,5 +187,22 @@ export function notGetOfferStatus() {
 export function createNewOfferSuccess() {
   return {
     type: CREATE_OFFER_SUCCESS,
+  };
+}
+export function updateOfferStatus(status) {
+  return {
+    type: UPDATE_OFFER_STATUS,
+    status,
+  };
+}
+export function showSnackbar(payload) {
+  return {
+    type: SHOW_SNACKBAR,
+    payload,
+  };
+}
+export function hideSnackbar() {
+  return {
+    type: HIDE_SNACKBAR,
   };
 }

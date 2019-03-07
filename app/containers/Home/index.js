@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import Snackbar from '@material-ui/core/Snackbar';
 import ItemThumnail from 'components/ItemThumnail';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -44,6 +45,7 @@ import {
   toggleResultModal,
   toggleTradeUrlInputModal,
   updateTradeUrl,
+  hideSnackbar,
 } from './actions';
 import messages from './messages';
 import reducer from './reducer';
@@ -483,6 +485,17 @@ export class Home extends React.Component {
       return true;
     }
     return false;
+  };
+
+  getSnackbarVariant = () => {
+    switch (this.props.trade.snackbar.color) {
+      case 'success':
+        return this.props.classes.snackbarSuccess;
+      case 'fail':
+        return this.props.classes.snackbarError;
+      default:
+        return this.props.classes.snackbarInfo;
+    }
   };
 
   render() {
@@ -1195,6 +1208,19 @@ export class Home extends React.Component {
             )}
           </div>
         </Modal>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={this.props.trade.snackbar.isDisplay}
+          autoHideDuration={5000}
+          onClose={this.props.hideSnackbar}
+          ContentProps={{
+            className: this.getSnackbarVariant(),
+          }}
+          message={this.props.trade.snackbar.message}
+        />
       </div>
     );
   }
@@ -1216,6 +1242,7 @@ Home.propTypes = {
   toggleTradeUrlInputModal: PropTypes.func.isRequired,
   toggleResultModal: PropTypes.func.isRequired,
   createNewOffer: PropTypes.func.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -1237,6 +1264,7 @@ function mapDispatchToProps(dispatch) {
     removeBotItem: item => dispatch(removeBotItem(item)),
     removePlayerItem: item => dispatch(removePlayerItem(item)),
     updateTradeUrl: url => dispatch(updateTradeUrl(url)),
+    hideSnackbar: () => dispatch(hideSnackbar()),
   };
 }
 

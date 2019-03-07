@@ -1,7 +1,10 @@
+import React from 'react';
 import { takeEvery, takeLatest, call, put, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import request from 'utils/request';
 import Config from 'utils/config';
+import { Typography } from '@material-ui/core';
+import { FormattedMessage } from 'react-intl';
 import {
   getInventorySuccess,
   getBotItemsSuccess,
@@ -20,6 +23,8 @@ import {
   getOfferStatus,
   createNewOfferSuccess,
   notGetOfferStatus,
+  updateOfferStatus,
+  showSnackbar,
 } from './actions';
 import {
   CALL_STEAM_AUTHENTICATE,
@@ -27,6 +32,7 @@ import {
   CREATE_NEW_OFFER,
   GET_OFFER_STATUS,
 } from './constants';
+import messages from './messages';
 
 export function* getUserInventorySaga() {
   const id = window.localStorage.getItem('tradewithme/user-id');
@@ -97,6 +103,16 @@ export function* createNewOfferSaga() {
       yield put(clearBotSelectedItems());
       yield put(clearPlayerSelectedItems());
       yield put(tradeUrlVerified());
+      yield put(
+        showSnackbar({
+          message: (
+            <Typography variant="subtitle1" color="inherit">
+              <FormattedMessage {...messages.offerProcessing} />
+            </Typography>
+          ),
+          color: 'info',
+        }),
+      );
     } catch (error) {
       yield put(createNewOfferFail());
       if (error.message === 'invalid trade url') {
@@ -119,13 +135,47 @@ export function* getOfferStatusSaga() {
     }
     if (res.status === 'success') {
       yield put(createNewOfferSuccess(res));
+      yield put(
+        showSnackbar({
+          message: (
+            <Typography variant="subtitle1" color="inherit">
+              <FormattedMessage {...messages.lastOfferStatus} />
+              success
+            </Typography>
+          ),
+          color: 'success',
+        }),
+      );
     }
     if (res.status === 'fail') {
       yield put(createNewOfferFail());
+      yield put(
+        showSnackbar({
+          message: (
+            <Typography variant="subtitle1" color="inherit">
+              <FormattedMessage {...messages.lastOfferStatus} />
+              fail
+            </Typography>
+          ),
+          color: 'fail',
+        }),
+      );
     }
     if (res.status === 'empty') {
       yield put(notGetOfferStatus());
+      yield put(
+        showSnackbar({
+          message: (
+            <Typography variant="subtitle1" color="inherit">
+              <FormattedMessage {...messages.lastOfferStatus} />
+              empty
+            </Typography>
+          ),
+          color: 'info',
+        }),
+      );
     }
+    yield put(updateOfferStatus(res.status));
   } catch (error) {
     yield delay(5000);
     yield put(getOfferStatus());

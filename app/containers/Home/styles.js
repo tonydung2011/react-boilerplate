@@ -1,4 +1,6 @@
-export default () => ({
+import green from '@material-ui/core/colors/green';
+
+export default theme => ({
   input: {
     color: 'white',
   },
@@ -130,5 +132,14 @@ export default () => ({
   },
   colorD7816A: {
     color: '#D7816A',
+  },
+  snackbarSuccess: {
+    backgroundColor: green[900],
+  },
+  snackbarError: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  snackbarInfo: {
+    backgroundColor: theme.palette.primary.dark,
   },
 });
