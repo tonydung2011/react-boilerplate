@@ -87,12 +87,14 @@ export function* createNewOfferSaga() {
             .toJS()
             .map(item => ({
               assetid: item.assetid,
+              marketHashName: item.marketHashName,
             })),
           botItems: state
             .getIn(['home', 'trade', 'itemsReceive'])
             .toJS()
             .map(item => ({
               assetid: item.assetid,
+              marketHashName: item.marketHashName,
             })),
           userName: state.getIn(['home', 'user', 'info', 'personaname']),
           userId: state.getIn(['home', 'user', 'info', 'steamid']),
