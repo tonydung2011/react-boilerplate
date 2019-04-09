@@ -78,7 +78,6 @@ export function* getDotaItemsOnStateSaga() {
 
 export function* reloadDotaItemsToDefaultSaga(action) {
   yield put.resolve(updatePage(1));
-  yield put.resolve(updateLimit(10));
   if (action && action.query.page) {
     yield put.resolve(updatePage(action.query.page));
   }

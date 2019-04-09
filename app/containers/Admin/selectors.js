@@ -27,6 +27,10 @@ const selectDotaItemsTotal = () =>
   createSelector(selectDotaItemsAllDomain, state => state.get('total'));
 const selectAuthenticated = () =>
   createSelector(selectDotaItemsAllDomain, state => state.get('authenticated'));
+const selectPopupStatus = () =>
+  createSelector(selectDotaItemsAllDomain, state =>
+    state.get('isUpdatePopupOpen'),
+  );
 
 /**
  * Default selector used by DotaItemsAll
@@ -46,4 +50,5 @@ export {
   selectDotaItemsLimit,
   selectDotaItemsTotal,
   selectAuthenticated,
+  selectPopupStatus,
 };

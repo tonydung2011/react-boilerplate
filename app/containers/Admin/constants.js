@@ -20,3 +20,5 @@ export const UPDATE_HERO = 'app/Admin/UPDATE_HERO';
 export const UPDATE_MARKET_HASH_NAME = 'app/Admin/UPDATE_MARKET_HASH_NAME';
 export const UPDATE_MIN_PRICE = 'app/Admin/UPDATE_MIN_PRICE';
 export const UPDATE_MAX_PRICE = 'app/Admin/UPDATE_MAXPRICE';
+export const OPEN_UPDATE_POPUP = 'app/Admin/OPEN_UPDATE_POPUP';
+export const CLOSE_UPDATE_POPUP = 'app/Admin/CLOSE_UPDATE_POPUP';

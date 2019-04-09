@@ -37,4 +37,12 @@ export default defineMessages({
     id: `${scope}.clearSession`,
     defaultMessage: 'Clear Session',
   },
+  cancel: {
+    id: `${scope}.cancel`,
+    defaultMessage: 'Cancel',
+  },
+  updateDotaItemTitle: {
+    id: `${scope}.updateDotaItemTitle`,
+    defaultMessage: 'Update Dota Items',
+  },
 });

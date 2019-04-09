@@ -11,14 +11,14 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import Spinner from 'react-spinkit';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -36,10 +36,17 @@ import makeSelectDotaItemsAll, {
   selectDotaItemsLimit,
   selectDotaItemsTotal,
   selectAuthenticated,
+  selectPopupStatus,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getDotaItems, reloadDotaItem, updateDotaItems } from './actions';
+import {
+  getDotaItems,
+  reloadDotaItem,
+  updateDotaItems,
+  openUpdatePopup,
+  closeUpdatePopup,
+} from './actions';
 
 /* eslint-disable react/prefer-stateless-function */
 export class Admin extends React.Component {
@@ -55,6 +62,7 @@ export class Admin extends React.Component {
       maxPrice: '',
       sort: '',
       overstock: '',
+      volumn: '',
     };
   }
 
@@ -116,6 +124,12 @@ export class Admin extends React.Component {
     });
   };
 
+  onVolumnChange = e => {
+    this.setState({
+      volumn: e.target.value,
+    });
+  };
+
   updateData = () => {
     const selectedItems = this.table.state.selection; /* eslint-disable-line */
     const updateData = selectedItems.map(item => ({
@@ -123,7 +137,9 @@ export class Admin extends React.Component {
       tradable: this.state.tradable,
       marketRate: this.state.marketRate,
       overstock: this.state.overstock,
+      volumn: this.state.volumn,
     }));
+    this.props.closeUpdatePopup();
     this.props.updateDotaItems(updateData);
   };
 
@@ -157,7 +173,7 @@ export class Admin extends React.Component {
             </Grid>
           </Grid>
           <Grid container justify="flex-start" className={classes.grid}>
-            <Grid item md={4}>
+            <Grid item md={1}>
               <Button
                 variant="contained"
                 color="primary"
@@ -165,68 +181,22 @@ export class Admin extends React.Component {
               >
                 <FormattedMessage {...messages.reload} />
               </Button>
+            </Grid>
+            <Grid item md={2}>
               <Button variant="contained" onClick={this.props.adminLoginFail}>
                 <FormattedMessage {...messages.clearSession} />
               </Button>
             </Grid>
-            <Grid item md={8}>
-              <Grid container>
-                <Grid item md={2}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="age-simple">trade</InputLabel>
-                    <Select
-                      value={this.state.tradable}
-                      onChange={this.onChangeTradable}
-                      inputProps={{
-                        name: 'tradable',
-                        id: 'tradable-id',
-                      }}
-                    >
-                      <MenuItem value={false}>Not trade</MenuItem>
-                      <MenuItem value>trade</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={4}>
-                  <TextField
-                    select
-                    className={classes.textField}
-                    id="market-rate"
-                    label="Market rate"
-                    value={this.state.marketRate}
-                    onChange={this.onMarketRateEditChange}
-                    margin="dense"
-                    type="number"
-                  >
-                    <option value={0.85}>85%</option>
-                    <option value={0.9}>90%</option>
-                    <option value={0.95}>95%</option>
-                    <option value={1}>100%</option>
-                    <option value={1.05}>105%</option>
-                  </TextField>
-                </Grid>
-                <Grid item md={3}>
-                  <TextField
-                    className={classes.textField}
-                    id="overstock"
-                    label="Overstock"
-                    value={this.state.overstock}
-                    onChange={this.onOverstockChange}
-                    margin="dense"
-                    type="number"
-                  />
-                </Grid>
-                <Grid item md={3}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={this.updateData}
-                  >
-                    <FormattedMessage {...messages.update} />
-                  </Button>
-                </Grid>
-              </Grid>
+            <Grid item md={1}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.props.openUpdatePopup}
+              >
+                <FormattedMessage {...messages.update} />
+              </Button>
             </Grid>
+            <Grid item md={8} />
           </Grid>
           <Grid container className={classes.grid}>
             <Grid item md={2}>
@@ -325,6 +295,87 @@ export class Admin extends React.Component {
         <Modal open={this.props.authenticated === 'loading'}>
           <Spinner className="center" name="folding-cube" color="white" />
         </Modal>
+        <Dialog
+          open={this.props.popupStatus}
+          onClose={this.props.closeUpdatePopup}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle id="form-dialog-title">
+            <FormattedMessage {...messages.updateDotaItemTitle} />
+          </DialogTitle>
+          <DialogContent>
+            <Grid container>
+              <Grid item md={6}>
+                <TextField
+                  select
+                  className={classes.textField}
+                  id="market-rate"
+                  label="Trade"
+                  value={this.state.tradable}
+                  onChange={this.onChangeTradable}
+                  margin="dense"
+                >
+                  <option value={false}>Not Trade</option>
+                  <option value>Trade</option>
+                </TextField>
+              </Grid>
+              <Grid item md={6}>
+                <TextField
+                  select
+                  className={classes.textField}
+                  id="market-rate"
+                  label="Market rate"
+                  value={this.state.marketRate}
+                  onChange={this.onMarketRateEditChange}
+                  margin="dense"
+                  type="number"
+                >
+                  <option value={0.85}>85%</option>
+                  <option value={0.9}>90%</option>
+                  <option value={0.95}>95%</option>
+                  <option value={1}>100%</option>
+                  <option value={1.05}>105%</option>
+                </TextField>
+              </Grid>
+              <Grid item md={6}>
+                <TextField
+                  className={classes.textField}
+                  id="overstock"
+                  label="Overstock"
+                  value={this.state.overstock}
+                  onChange={this.onOverstockChange}
+                  margin="dense"
+                  type="number"
+                />
+              </Grid>
+              <Grid item md={6}>
+                <TextField
+                  className={classes.textField}
+                  id="volumn"
+                  label="Volumn"
+                  value={this.state.volumn}
+                  onChange={this.onVolumnChange}
+                  margin="dense"
+                  type="number"
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={this.props.closeUpdatePopup}>
+              <FormattedMessage {...messages.cancel} />
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={this.updateData}
+            >
+              <FormattedMessage {...messages.update} />
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -333,6 +384,8 @@ export class Admin extends React.Component {
 Admin.propTypes = {
   reloadDotaItem: PropTypes.func.isRequired,
   updateDotaItems: PropTypes.func.isRequired,
+  openUpdatePopup: PropTypes.func.isRequired,
+  closeUpdatePopup: PropTypes.func.isRequired,
   classes: PropTypes.object,
   onFetchData: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -343,6 +396,7 @@ Admin.propTypes = {
   limit: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   adminLoginFail: PropTypes.func.isRequired,
+  popupStatus: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -355,6 +409,7 @@ const mapStateToProps = createStructuredSelector({
   limit: selectDotaItemsLimit(),
   total: selectDotaItemsTotal(),
   authenticated: selectAuthenticated(),
+  popupStatus: selectPopupStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -363,6 +418,8 @@ function mapDispatchToProps(dispatch) {
     reloadDotaItem: q => dispatch(reloadDotaItem(q)),
     updateDotaItems: data => dispatch(updateDotaItems(data)),
     onFetchData: () => dispatch(getDotaItems()),
+    openUpdatePopup: () => dispatch(openUpdatePopup()),
+    closeUpdatePopup: () => dispatch(closeUpdatePopup()),
   };
 }
 

@@ -21,6 +21,8 @@ import {
   UPDATE_MARKET_HASH_NAME,
   UPDATE_MIN_PRICE,
   UPDATE_MAX_PRICE,
+  OPEN_UPDATE_POPUP,
+  CLOSE_UPDATE_POPUP,
 } from './constants';
 
 export function defaultAction() {
@@ -117,5 +119,17 @@ export function updateDotaItemsFail(error) {
   return {
     type: UPDATE_DOTA_ITEMS_FAIL,
     error,
+  };
+}
+
+export function openUpdatePopup() {
+  return {
+    type: OPEN_UPDATE_POPUP,
+  };
+}
+
+export function closeUpdatePopup() {
+  return {
+    type: CLOSE_UPDATE_POPUP,
   };
 }

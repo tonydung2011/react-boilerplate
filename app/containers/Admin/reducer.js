@@ -21,6 +21,8 @@ import {
   UPDATE_SORT,
   UPDATE_MAX_PRICE,
   UPDATE_MIN_PRICE,
+  OPEN_UPDATE_POPUP,
+  CLOSE_UPDATE_POPUP,
 } from './constants';
 
 export const initialState = fromJS({
@@ -40,6 +42,7 @@ export const initialState = fromJS({
   minPrice: '',
   maxPrice: '',
   sort: 'price',
+  isUpdatePopupOpen: false,
 });
 
 function dotaItemsAllReducer(state = initialState, action) {
@@ -95,6 +98,10 @@ function dotaItemsAllReducer(state = initialState, action) {
       return state.set('maxPrice', action.maxPrice);
     case UPDATE_MIN_PRICE:
       return state.set('minPrice', action.minPrice);
+    case OPEN_UPDATE_POPUP:
+      return state.set('isUpdatePopupOpen', true);
+    case CLOSE_UPDATE_POPUP:
+      return state.set('isUpdatePopupOpen', false);
     default:
       return state;
   }
