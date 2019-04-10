@@ -119,19 +119,19 @@ export default theme => ({
     color: '#C9D5B5',
   },
   colorA5668B: {
-    color: '#A5668B',
+    backgroundColor: '#A5668B',
   },
   color84ACCE: {
-    color: '#84ACCE',
+    backgroundColor: '#84ACCE',
   },
   colorD33F49: {
-    color: '#D33F49',
+    backgroundColor: '#D33F49',
   },
   color77BA99: {
-    color: '#77BA99',
+    backgroundColor: '#77BA99',
   },
   colorD7816A: {
-    color: '#D7816A',
+    backgroundColor: '#D7816A',
   },
   snackbarSuccess: {
     backgroundColor: green[900],
@@ -141,5 +141,9 @@ export default theme => ({
   },
   snackbarInfo: {
     backgroundColor: theme.palette.primary.dark,
+  },
+  itemThumbnail: {
+    borderColor: '#DCDCDC',
+    borderWidth: 3,
   },
 });

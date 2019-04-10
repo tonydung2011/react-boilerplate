@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-no-comment-textnodes */
 /**
  *
  * ItemThumnail
@@ -29,8 +32,12 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
   return (
     <ReactHover options={optionsCursorTrueWithMargin} key={uuid()}>
       <ReactHover.Trigger type="trigger">
-        <div onClick={validate.valid ? onClickHandler : undefined}>{/* eslint-disable-line */}
+        <div
+          onClick={validate.valid ? onClickHandler : undefined}
+          className={classes.itemContainer}
+        >
           <div>
+            <div className={classes.gemContainer} />
             <img
               src={component.image}
               width="100%"
@@ -42,18 +49,25 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
               }}
             />
           </div>
-          <Typography className={classes.whiteText}>
-            {component.marketHashName}
-          </Typography>
-          {validate.valid ? (
-            <Typography className={classes.priceText} variant="subheading">
-              ${_.round(component.price, 4)} $
-            </Typography>
-          ) : (
-            <Typography className={classes.disableText} variant="subheading">
-              {validate.state}
-            </Typography>
-          )}
+          <div className={classes.priceContainer}>
+            {validate.valid ? (
+              <Typography
+                className={classes.priceText}
+                variant="subheading"
+                align="center"
+              >
+                {_.round(component.price, 4)} $
+              </Typography>
+            ) : (
+              <Typography
+                align="center"
+                className={classes.disableText}
+                variant="subheading"
+              >
+                {validate.state}
+              </Typography>
+            )}
+          </div>
         </div>
       </ReactHover.Trigger>
       <ReactHover.Hover type="hover">
@@ -68,7 +82,7 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
           {validate.valid ? (
             <div>
               <Typography variant="subtitle1" className={classes.whiteText}>
-                {component.name}
+                {component.marketHashName}
               </Typography>
               <p>
                 <span style={{ color: '#DA7323' }}>Hero: </span>

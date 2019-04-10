@@ -161,6 +161,7 @@ export class Home extends React.Component {
             sm={4}
             md={3}
             key={`player-selected-item-${item.assetid}`}
+            className={classes.itemThumbnail}
           >
             <ItemThumnail
               component={item}
@@ -190,6 +191,7 @@ export class Home extends React.Component {
             sm={4}
             md={3}
             key={`bot-selected-item-${item.assetid}`}
+            className={classes.itemThumbnail}
           >
             <ItemThumnail
               component={item}
@@ -226,7 +228,14 @@ export class Home extends React.Component {
     return (
       <Grid container spacing={8}>
         {_.map(this.botFilter(this.state.botItems), item => (
-          <Grid item xl={2} sm={4} md={3} key={`bot-item-${item.assetid}`}>
+          <Grid
+            item
+            xl={2}
+            sm={4}
+            md={3}
+            key={`bot-item-${item.assetid}`}
+            className={classes.itemThumbnail}
+          >
             <ItemThumnail
               component={item}
               onClickHandler={() => this.props.selectBotItem(item)}
@@ -292,7 +301,14 @@ export class Home extends React.Component {
     return (
       <Grid container spacing={8}>
         {_.map(this.playerFilter(this.state.playerItems), item => (
-          <Grid item xl={2} sm={4} md={3} key={`player-item-${item.assetid}`}>
+          <Grid
+            item
+            xl={2}
+            sm={4}
+            md={3}
+            key={`player-item-${item.assetid}`}
+            className={classes.itemThumbnail}
+          >
             <ItemThumnail
               component={item}
               validate={this.validateItem(item)}
@@ -566,6 +582,9 @@ export class Home extends React.Component {
             </Toolbar>
           </AppBar>
           <div className="body">
+            <div className="notice-board">
+              <div className="notice-board-writable" />
+            </div>
             <Grid container>
               <Grid item sm={5} className="select-area offer">
                 <div id="item-selected-area">
@@ -882,52 +901,57 @@ export class Home extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="margin-y-10 pad-10 select-area-header marketrate-container">
+                <div className="margin-y-10 pad-10 marketrate-container">
                   <div className="text-align-center margin-y-10">
                     <Typography variant="title" className={classes.colorC9D5B5}>
                       <FormattedMessage {...messages.marketRate} />
                     </Typography>
                   </div>
-                  <div className="text-align-center margin-y-10">
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.colorD7816A}
-                    >
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.colorD7816A
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
                       <FormattedMessage {...messages.marketRate85} />
                     </Typography>
                   </div>
-                  <div className="text-align-center margin-y-10">
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.color77BA99}
-                    >
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.color77BA99
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
                       <FormattedMessage {...messages.marketRate90} />
                     </Typography>
                   </div>
-                  <div className="text-align-center margin-y-10">
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.color84ACCE}
-                    >
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.color84ACCE
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
                       <FormattedMessage {...messages.marketRate95} />
                     </Typography>
                   </div>
-                  <div className="text-align-center margin-y-10">
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.colorD33F49}
-                    >
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.colorD33F49
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
                       <FormattedMessage
                         {...messages.marketRate100}
                         className="color-C9D5B5"
                       />
                     </Typography>
                   </div>
-                  <div className="text-align-center margin-y-10">
-                    <Typography
-                      variant="subtitle1"
-                      className={classes.colorA5668B}
-                    >
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.colorA5668B
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
                       <FormattedMessage
                         {...messages.marketRate105}
                         className="color-C9D5B5"
