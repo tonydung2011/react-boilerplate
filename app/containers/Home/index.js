@@ -148,7 +148,7 @@ export class Home extends React.Component {
         <FormattedMessage
           {...messages.selectedItems}
           values={{
-            action: 'OFFER',
+            action: 'ĐỀ NGHỊ',
           }}
         />
       </Typography>
@@ -178,7 +178,7 @@ export class Home extends React.Component {
         <FormattedMessage
           {...messages.selectedItems}
           values={{
-            action: 'RECEIVE',
+            action: 'NHẬN',
           }}
         />
       </Typography>

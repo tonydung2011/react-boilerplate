@@ -11,38 +11,38 @@ export const scope = 'app.containers.Admin';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'ALL DOTA2 TRADE ITEMS',
+    defaultMessage: 'TẤT CẢ VẬT PHẨM',
   },
   reload: {
     id: `${scope}.reload`,
-    defaultMessage: 'reload',
+    defaultMessage: 'tải lại',
   },
   update: {
     id: `${scope}.update`,
-    defaultMessage: 'Update',
+    defaultMessage: 'Chỉnh sửa',
   },
   authenticatedRequired: {
     id: `${scope}.authenticatedRequired`,
-    defaultMessage: 'Protected Resource',
+    defaultMessage: 'Tài Nguyên được bảo vệ',
   },
   password: {
     id: `${scope}.password`,
-    defaultMessage: 'Password',
+    defaultMessage: 'Mật khẩu',
   },
   submit: {
     id: `${scope}.submit`,
-    defaultMessage: 'Submit',
+    defaultMessage: 'Gửi',
   },
   clearSession: {
     id: `${scope}.clearSession`,
-    defaultMessage: 'Clear Session',
+    defaultMessage: 'Đăng xuất',
   },
   cancel: {
     id: `${scope}.cancel`,
-    defaultMessage: 'Cancel',
+    defaultMessage: 'Huỷ',
   },
   updateDotaItemTitle: {
     id: `${scope}.updateDotaItemTitle`,
-    defaultMessage: 'Update Dota Items',
+    defaultMessage: 'Cập nhật vật Phẩm Dota',
   },
 });

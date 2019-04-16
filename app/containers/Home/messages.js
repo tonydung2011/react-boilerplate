@@ -19,28 +19,27 @@ export default defineMessages({
   },
   selectedItems: {
     id: `${scope}.selectedItems`,
-    defaultMessage:
-      'SELECT THE ITEMS YOU WANT TO {action} FROM THE INVENTORY BOX BELOW',
+    defaultMessage: 'CHỌN VẬT PHẨM MÀ BẠN MUỐN {action} TỪ KHO BÊN DƯỚI',
   },
   someThingWrong: {
     id: `${scope}.someThingWrong`,
-    defaultMessage: 'Some Thing went wrong',
+    defaultMessage: 'Oopps!, Lỗi Bất ngờ đã xảy ra',
   },
   notLogin: {
     id: `${scope}.header`,
-    defaultMessage: 'YOU DID NOT LOGIN',
+    defaultMessage: 'Bạn Chưa đăng nhập',
   },
   login: {
     id: `${scope}.header`,
-    defaultMessage: 'LOGIN VIA STEAM',
+    defaultMessage: 'ĐĂNG NHẬP THÔNG QUA STEAM',
   },
   price: {
     id: `${scope}.price`,
-    defaultMessage: 'Prices',
+    defaultMessage: 'Giá',
   },
   name: {
     id: `${scope}.name`,
-    defaultMessage: 'Name',
+    defaultMessage: 'Tên',
   },
   hero: {
     id: `${scope}.hero`,
@@ -52,15 +51,15 @@ export default defineMessages({
   },
   toTrade: {
     id: `${scope}.toTrade`,
-    defaultMessage: 'Trade',
+    defaultMessage: 'Trao Đổi',
   },
   botFilter: {
     id: `${scope}.botFilter`,
-    defaultMessage: 'Bot Filter',
+    defaultMessage: 'Bộ lọc của Bot',
   },
   all: {
     id: `${scope}.all`,
-    defaultMessage: 'All',
+    defaultMessage: 'Tất cả',
   },
   common: {
     id: `${scope}.common`,
@@ -92,47 +91,47 @@ export default defineMessages({
   },
   youReceive: {
     id: `${scope}.youReceive`,
-    defaultMessage: 'You Receive',
+    defaultMessage: 'Bân Nhận được',
   },
   youOffer: {
     id: `${scope}.youOffer`,
-    defaultMessage: 'You Offer',
+    defaultMessage: 'Bạn Đề nghị',
   },
   logout: {
     id: `${scope}.logout`,
-    defaultMessage: 'Log out',
+    defaultMessage: 'Đăng Xuất',
   },
   submit: {
     id: `${scope}.submit`,
-    defaultMessage: 'submit',
+    defaultMessage: 'Gửi',
   },
   tradeUrl: {
     id: `${scope}.tradeUrl`,
-    defaultMessage: 'Trade Url',
+    defaultMessage: 'Link Trao Đổi',
   },
   tradeUrlModalTitle: {
     id: `${scope}.tradeUrlModalTitle`,
-    defaultMessage: 'SUBMIT YOUR TRADE URL',
+    defaultMessage: 'GỬI LINK TRAO ĐỔI',
   },
   getTradeUrl: {
     id: `${scope}.getTradeUrl`,
-    defaultMessage: 'GET MY TRADE URL',
+    defaultMessage: 'NHẬN LINK TRAO ĐỔI CỦA TÔI',
   },
   createOfferFail: {
     id: `${scope}.createOfferFail`,
-    defaultMessage: 'CANNOT CREATE THE PREVIOUS OFFER',
+    defaultMessage: 'KHÔNG THỂ TẠO GIAO DỊCH',
   },
   createOfferSuccess: {
     id: `${scope}.createOfferSuccess`,
-    defaultMessage: 'OFFER CREATED SUCCESSFULLY',
+    defaultMessage: 'GIAO DỊCH THÀNH CÔNG',
   },
   showMyOffer: {
     id: `${scope}.showMyOffer`,
-    defaultMessage: 'Show Offer',
+    defaultMessage: 'XEM TRONG STEAM',
   },
   close: {
     id: `${scope}.close`,
-    defaultMessage: 'Close',
+    defaultMessage: 'Đóng',
   },
   marketRate: {
     id: `${scope}.marketRate`,
@@ -160,14 +159,14 @@ export default defineMessages({
   },
   pendingOffer: {
     id: `${scope}.pendingOffer`,
-    defaultMessage: 'You have a pending offer being processed, please wait',
+    defaultMessage: 'Bạn đang có 1 giao dịch gian dở, vui lòng đợi',
   },
   lastOfferStatus: {
     id: `${scope}.lastOfferStatus`,
-    defaultMessage: 'Your last offer status: ',
+    defaultMessage: 'Trạng thái giao dịch gần nhất: ',
   },
   offerProcessing: {
     id: `${scope}.offerProcessing`,
-    defaultMessage: 'Your offer is processing, please wait!',
+    defaultMessage: 'Đang xử lý giao dịch của bạn, vui lòng đợi!',
   },
 });
