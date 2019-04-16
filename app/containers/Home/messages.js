@@ -91,7 +91,7 @@ export default defineMessages({
   },
   youReceive: {
     id: `${scope}.youReceive`,
-    defaultMessage: 'Bân Nhận được',
+    defaultMessage: 'Bạn Nhận được',
   },
   youOffer: {
     id: `${scope}.youOffer`,

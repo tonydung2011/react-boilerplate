@@ -404,13 +404,13 @@ export class Home extends React.Component {
     switch (key) {
       case 'price':
         if (this.isFilterInvalid()) {
-          return 'Max price cannot smaller than min price';
+          return 'Giá lớn nhất không thể nhỏ hơn giá nhỏ nhất';
         }
         return arg[0] === 'min'
-          ? 'Custom your minium price'
-          : 'Custom your maxium price';
+          ? 'Điều chỉnh giá nhỏ nhất'
+          : 'Điều chỉnh giá lớn nhất';
       case 'trade-url':
-        return 'As Steam policy, we need your trade url to be able to send you this offer. You only need to provide it once since your first trade success';
+        return 'Theo quy định của Steam, bạn cần phải cung cấp Link trao đổi (Trade URL) để chúng tôi có thể gửi giao dịch này cho bạn. Bạn chỉ cần cung cấp 1 lần sau giao dịch thành công đầu tiên';
       default:
         return '';
     }
@@ -639,7 +639,7 @@ export class Home extends React.Component {
                         <Grid item sm={5}>
                           <TextField
                             id="item-player-order-field"
-                            label="Order"
+                            label="Sắp xếp theo"
                             className={classes.input}
                             value={this.state.playerFilter.order}
                             onChange={this.onChangePlayer('order')}
@@ -668,17 +668,17 @@ export class Home extends React.Component {
                             margin="dense"
                             fullWidth
                           >
-                            <option value="price">Price</option>
-                            <option value="name">Name</option>
-                            <option value="hero">hero</option>
-                            <option value="rarity">rarity</option>
+                            <option value="price">Giá</option>
+                            <option value="name">Tên</option>
+                            <option value="hero">nhân vật</option>
+                            <option value="rarity">Độ Quý</option>
                           </TextField>
                         </Grid>
                         <Grid item sm={5}>
                           <TextField
                             className={classes.input}
                             id="item-player-search-field"
-                            label="Search"
+                            label="Tìm Kiếm"
                             value={this.state.playerFilter.search}
                             onChange={this.onChangePlayer('search')}
                             margin="dense"
@@ -838,7 +838,7 @@ export class Home extends React.Component {
                       <TextField
                         className={classes.input}
                         id="item-filter-hero"
-                        label="Hero"
+                        label="Nhân vật"
                         value={this.state.botFilter.hero}
                         onChange={this.onChangeBot('hero')}
                         InputProps={{
@@ -1012,7 +1012,7 @@ export class Home extends React.Component {
                           <TextField
                             id="item-player-order-field"
                             select
-                            label="Order"
+                            label="Sắp xếp theo"
                             className={classes.input}
                             value={this.state.botFilter.sort}
                             onChange={this.onChangeBot('sort')}
@@ -1040,17 +1040,17 @@ export class Home extends React.Component {
                             margin="dense"
                             fullWidth
                           >
-                            <option value="price">Price</option>
-                            <option value="name">Name</option>
-                            <option value="hero">hero</option>
-                            <option value="rarity">rarity</option>
+                            <option value="price">Giá</option>
+                            <option value="name">Tên</option>
+                            <option value="hero">Nhân Vật</option>
+                            <option value="rarity">Độ Quý</option>
                           </TextField>
                         </Grid>
                         <Grid item sm={5}>
                           <TextField
                             className={classes.input}
                             id="item-player-search-field"
-                            label="Search"
+                            label="Tìm Kiếm"
                             value={this.state.botFilter.search}
                             onChange={this.onChangeBot('search')}
                             margin="dense"
