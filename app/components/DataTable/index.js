@@ -15,6 +15,17 @@ const CheckboxTable = checkboxHOC(ReactTable);
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
+const grayContainer = {
+  style: {
+    backgroundColor: 'inherit',
+  },
+};
+const inheritContainer = {
+  style: {
+    backgroundColor: '#DEE7E7',
+  },
+};
+
 /* eslint-disable react/prefer-stateless-function */
 class DataTable extends React.Component {
   constructor(props) {
@@ -63,7 +74,7 @@ class DataTable extends React.Component {
       const currentRecords = wrappedInstance.getResolvedState().sortedData;
       currentRecords.forEach(item => {
         selection.push({
-          marketHashName: item._original.marketHashName, /*eslint-disable-line*/
+          marketHashName: item._original.marketHashName /*eslint-disable-line*/,
           tradable: item.tradable,
         });
       });
@@ -172,6 +183,12 @@ class DataTable extends React.Component {
         onPageChange={page => this.props.updatePage(page + 1)}
         onPageSizeChange={pageSize => {
           this.props.updateLimit(pageSize);
+        }}
+        getTrGroupProps={(tableState, rowInfo) => {
+          if (rowInfo && rowInfo.row) {
+            return !rowInfo.row.tradable ? inheritContainer : grayContainer;
+          }
+          return {};
         }}
         {...checkboxProps}
       />
