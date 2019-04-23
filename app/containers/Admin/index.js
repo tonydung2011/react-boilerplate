@@ -124,12 +124,6 @@ export class Admin extends React.Component {
     });
   };
 
-  onVolumnChange = e => {
-    this.setState({
-      volumn: e.target.value,
-    });
-  };
-
   updateData = () => {
     const selectedItems = this.table.state.selection; /* eslint-disable-line */
     const updateData = selectedItems.map(item => ({
@@ -268,6 +262,7 @@ export class Admin extends React.Component {
                 <option value="name">name</option>
                 <option value="hero">hero</option>
                 <option value="rarity">rarity</option>
+                <option value="volumn">volumn</option>
               </TextField>
             </Grid>
           </Grid>
@@ -332,7 +327,9 @@ export class Admin extends React.Component {
                   margin="dense"
                   type="number"
                 >
-                  <option value={0.85}>85%</option>
+                  <option value={0.6}>60%</option>
+                  <option value={0.7}>70%</option>
+                  <option value={0.8}>80%</option>
                   <option value={0.9}>90%</option>
                   <option value={0.95}>95%</option>
                   <option value={1}>100%</option>
@@ -346,17 +343,6 @@ export class Admin extends React.Component {
                   label="Overstock"
                   value={this.state.overstock}
                   onChange={this.onOverstockChange}
-                  margin="dense"
-                  type="number"
-                />
-              </Grid>
-              <Grid item md={6}>
-                <TextField
-                  className={classes.textField}
-                  id="volumn"
-                  label="Volumn"
-                  value={this.state.volumn}
-                  onChange={this.onVolumnChange}
                   margin="dense"
                   type="number"
                 />

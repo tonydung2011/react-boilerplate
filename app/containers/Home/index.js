@@ -323,7 +323,13 @@ export class Home extends React.Component {
   validateItem = item => {
     if (!item.tradable) {
       return {
-        valide: false,
+        valid: false,
+        state: 'Unavailable',
+      };
+    }
+    if (item.steamTradable * item.steamMarketable < 1) {
+      return {
+        valid: false,
         state: 'Unavailable',
       };
     }
@@ -334,7 +340,7 @@ export class Home extends React.Component {
         item.marketMarketableRestriction > 0)
     ) {
       return {
-        valide: false,
+        valid: false,
         state: 'Unavailable',
       };
     }
@@ -344,7 +350,10 @@ export class Home extends React.Component {
         i => i.marketHashName,
       );
       const numberItem = itemCounts[item.marketHashName] || 0;
-      if (numberItem >= parseInt(item.overstock, 10)) {
+      if (
+        numberItem >= parseInt(item.overstock, 10) ||
+        numberItem >= item.marketTradableRestriction
+      ) {
         return {
           valid: false,
           state: 'Over Stock',
@@ -909,7 +918,34 @@ export class Home extends React.Component {
                   </div>
                   <div
                     className={`text-align-center margin-y-10 ${
-                      classes.colorD7816A
+                      classes.marketRate60
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
+                      <FormattedMessage {...messages.marketRate60} />
+                    </Typography>
+                  </div>
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.marketRate70
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
+                      <FormattedMessage {...messages.marketRate70} />
+                    </Typography>
+                  </div>
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.marketRate80
+                    }`}
+                  >
+                    <Typography variant="subtitle1">
+                      <FormattedMessage {...messages.marketRate80} />
+                    </Typography>
+                  </div>
+                  <div
+                    className={`text-align-center margin-y-10 ${
+                      classes.marketRate85
                     }`}
                   >
                     <Typography variant="subtitle1">
@@ -918,7 +954,7 @@ export class Home extends React.Component {
                   </div>
                   <div
                     className={`text-align-center margin-y-10 ${
-                      classes.color77BA99
+                      classes.marketRate90
                     }`}
                   >
                     <Typography variant="subtitle1">
@@ -927,7 +963,7 @@ export class Home extends React.Component {
                   </div>
                   <div
                     className={`text-align-center margin-y-10 ${
-                      classes.color84ACCE
+                      classes.marketRate95
                     }`}
                   >
                     <Typography variant="subtitle1">
@@ -936,7 +972,7 @@ export class Home extends React.Component {
                   </div>
                   <div
                     className={`text-align-center margin-y-10 ${
-                      classes.colorD33F49
+                      classes.marketRate100
                     }`}
                   >
                     <Typography variant="subtitle1">
@@ -948,7 +984,7 @@ export class Home extends React.Component {
                   </div>
                   <div
                     className={`text-align-center margin-y-10 ${
-                      classes.colorA5668B
+                      classes.marketRate105
                     }`}
                   >
                     <Typography variant="subtitle1">

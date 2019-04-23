@@ -28,6 +28,29 @@ const getHelpText = state =>
     ? 'There are several reasons for this item is unavailable. The item is not popular. A big number of one and the same items on our accounts and that the skin is one of the permanent blocked one'
     : 'Overstock means this item cannot be choosen at the moment. The reason of it is there are too many such item on our site now';
 
+const getColorFromMarketRate = marketRate => {
+  switch (marketRate) {
+    case 0.6:
+      return 'marketRate60';
+    case 0.7:
+      return 'marketRate70';
+    case 0.8:
+      return 'marketRate80';
+    case 0.85:
+      return 'marketRate85';
+    case 0.9:
+      return 'marketRate90';
+    case 0.95:
+      return 'marketRate95';
+    case 1:
+      return 'marketRate100';
+    case 1.05:
+      return 'marketRate105';
+    default:
+      return 'marketRate100';
+  }
+};
+
 function ItemThumnail({ component, classes, onClickHandler, validate }) {
   return (
     <ReactHover options={optionsCursorTrueWithMargin} key={uuid()}>
@@ -37,7 +60,11 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
           className={classes.itemContainer}
         >
           <div>
-            <div className={classes.gemContainer} />
+            <div
+              className={`${classes.gemContainer} ${
+                classes[getColorFromMarketRate(component.marketRate)]
+              }`}
+            />
             <img
               src={component.image}
               width="100%"
@@ -45,11 +72,15 @@ function ItemThumnail({ component, classes, onClickHandler, validate }) {
               alt={component.marketHashName}
               style={{
                 opacity: validate.valid ? 1 : 0.5,
-                backgroundColor: validate.valid ? undefined : '##747376',
+                backgroundColor: validate.valid ? undefined : '#747376',
               }}
             />
           </div>
-          <div className={classes.priceContainer}>
+          <div
+            className={`${classes.priceContainer} ${
+              classes[getColorFromMarketRate(component.marketRate)]
+            }`}
+          >
             {validate.valid ? (
               <Typography
                 className={classes.priceText}

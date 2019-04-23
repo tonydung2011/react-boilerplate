@@ -118,6 +118,15 @@ export default theme => ({
   colorC9D5B5: {
     color: '#C9D5B5',
   },
+  colorE7BBE3: {
+    backgroundColor: '#E7BBE3',
+  },
+  color23C9FF: {
+    backgroundColor: '#23C9FF',
+  },
+  colorABDF75: {
+    backgroundColor: '#ABDF75',
+  },
   colorA5668B: {
     backgroundColor: '#A5668B',
   },
@@ -125,12 +134,36 @@ export default theme => ({
     backgroundColor: '#84ACCE',
   },
   colorD33F49: {
-    backgroundColor: '#D33F49',
+    backgroundColor: '#1985A1',
   },
   color77BA99: {
     backgroundColor: '#77BA99',
   },
   colorD7816A: {
+    backgroundColor: '#D7816A',
+  },
+  marketRate60: {
+    backgroundColor: '#E7BBE3',
+  },
+  marketRate70: {
+    backgroundColor: '#23C9FF',
+  },
+  marketRate80: {
+    backgroundColor: '#ABDF75',
+  },
+  marketRate85: {
+    backgroundColor: '#A5668B',
+  },
+  marketRate90: {
+    backgroundColor: '#84ACCE',
+  },
+  marketRate95: {
+    backgroundColor: '#1985A1',
+  },
+  marketRate100: {
+    backgroundColor: '#77BA99',
+  },
+  marketRate105: {
     backgroundColor: '#D7816A',
   },
   snackbarSuccess: {
