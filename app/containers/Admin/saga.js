@@ -10,6 +10,7 @@ import Config from 'utils/config';
 import request from 'utils/request';
 import { navigateToPage } from 'utils/utils';
 import { adminLoginFail } from 'containers/Login/actions';
+import _ from 'lodash';
 import {
   GET_ALL_DOTA_ITEMS,
   UPDATE_DOTA_ITEMS,
@@ -107,6 +108,17 @@ export function* reloadDotaItemsToDefaultSaga(action) {
 
 export function* updateDotaItemsSaga(action) {
   try {
+    const state = yield select();
+    const data = state.getIn(['Admin', 'data']).toJS();
+    const param = _.map(action.data, i => {
+      const item = _.find(data, v => v.marketHashName === i.marketHashName);
+      return {
+        marketHashName: i.marketHashName,
+        tradable: typeof i.tradable === 'boolean' ? i.tradable : item.tradable,
+        marketRate: i.marketRate ? i.marketRate : item.marketRate,
+        overstock: i.overstock ? i.overstock : item.overstock,
+      };
+    });
     yield call(request, Config.api.updateItems, {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem(
@@ -114,7 +126,7 @@ export function* updateDotaItemsSaga(action) {
         )}`,
       },
       body: JSON.stringify({
-        data: action.data,
+        data: param,
       }),
       method: 'PUT',
     });

@@ -41,7 +41,10 @@ class DataTable extends React.Component {
     this.props.onFetchData();
   };
 
-  toggleSelection = (key, shift, row) => {
+  toggleSelection = (
+    key,
+    // shift, row
+  ) => {
     const keyIndex = _.findIndex(
       this.state.selection,
       i => i.marketHashName === key,
@@ -59,7 +62,6 @@ class DataTable extends React.Component {
           ...this.state.selection,
           {
             marketHashName: key,
-            tradable: row.tradable,
           },
         ],
       });

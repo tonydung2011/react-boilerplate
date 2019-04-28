@@ -53,8 +53,8 @@ export class Admin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tradable: true,
-      marketRate: '1',
+      tradable: undefined,
+      marketRate: '',
       marketHashName: '',
       hero: '',
       rarity: '',
@@ -310,6 +310,7 @@ export class Admin extends React.Component {
                   onChange={this.onChangeTradable}
                   margin="dense"
                 >
+                  <option value={undefined}>Không Thay đổi</option>
                   <option value={false}>Not Trade</option>
                   <option value>Trade</option>
                 </TextField>
@@ -325,6 +326,7 @@ export class Admin extends React.Component {
                   margin="dense"
                   type="number"
                 >
+                  <option value={undefined}>Không Thay Đổi</option>
                   <option value={0.6}>60%</option>
                   <option value={0.7}>70%</option>
                   <option value={0.8}>80%</option>
