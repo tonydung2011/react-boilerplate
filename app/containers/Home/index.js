@@ -1302,7 +1302,6 @@ Home.propTypes = {
   toggleTradeUrlInputModal: PropTypes.func.isRequired,
   toggleResultModal: PropTypes.func.isRequired,
   createNewOffer: PropTypes.func.isRequired,
-  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

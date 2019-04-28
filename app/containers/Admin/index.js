@@ -62,7 +62,6 @@ export class Admin extends React.Component {
       maxPrice: '',
       sort: '',
       overstock: '',
-      volumn: '',
     };
   }
 
@@ -131,7 +130,6 @@ export class Admin extends React.Component {
       tradable: this.state.tradable,
       marketRate: this.state.marketRate,
       overstock: this.state.overstock,
-      volumn: this.state.volumn,
     }));
     this.props.closeUpdatePopup();
     this.props.updateDotaItems(updateData);
